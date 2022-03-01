@@ -4,9 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const initialData = [ {item: "Buy John new Grisham book"}];
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App items={initialData}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
