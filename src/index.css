@@ -45,6 +45,7 @@ ul li {
 
 #addItem {
   margin-left: 0;
+  text-align: left;
   font-size: 14px;
   color: #6B6E70;
 }
@@ -117,6 +118,14 @@ input[type=text] {
   outline: 0;
   border: 0;
   border-bottom: .25px solid #86C232;
+}
+
+input[class=inputItem]::after {
+  content: attr(placeholder);
+}
+
+input[class=listItemValue] {
+  border-bottom: none;
 }
 
 input[class=greenCheck] {

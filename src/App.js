@@ -9,13 +9,13 @@ function App(props) {
     const [completedItems, setCompletedItems] = useState([]);
     const totalItems = props.initialData;
 
-    function handleEditItem(itemId, value) {
+    function handleEditItem(itemId, value, field) {
         console.log("handle edit item");
-        // setItems(
-        //     items.map(
-        //         (items) => (items.id === itemId ? {...items, value} : items)
-        //     )
-        // );
+        setItems(
+            items.map(
+                (item) => (item.id === itemId ? {...item, [field]: value} : item)
+            )
+        );
     }
 
     function handleAddItem(e) {
@@ -28,7 +28,9 @@ function App(props) {
     }
 
     function handleDeleteCompleted() {
-
+        // make pop up box
+        // totalItems.filter(i => !completedItems.includes(i.id)))
+        // setItems(items.filter(i => !completedItems.includes(i.id)));
     }
 
     function handleToggleCompleted(e) {

@@ -18,7 +18,7 @@ function ListItems(props) {
         )}
 
         <label id="addItem">
-            <input type="checkbox" className="greenCheck"/><input type="text" className="inputItem" placeholder="Add item"
+            <input type="text" className="inputItem" placeholder="Add item"
                                                                   onKeyPress={props.onAddItem}/>
         </label>
         </ul>
