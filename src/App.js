@@ -1,12 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import {useState} from "react";
+import DeleteCompletedAlert from "./DeleteCompletedAlert";
 import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 function App(props) {
     const [items, setItems] = useState(props.initialData);
     const [completedItems, setCompletedItems] = useState([]);
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const deletedItems = [];
     const totalItems = props.initialData;
 
@@ -20,7 +22,7 @@ function App(props) {
 
     function handleAddItem(e) {
         if (e.key === 'Enter') {
-            const newItem = {id: generateUniqueID(), value: e.target.value};
+            const newItem = {id: generateUniqueID(), value: e.target.value}; // add a boolean for completed
             setItems([...items, newItem]);
             totalItems.push(newItem);
             e.target.value = "";
@@ -36,18 +38,16 @@ function App(props) {
     }
 
     function handleDeleteCompleted() {
-        // make pop up box
-
         totalItems.filter(i => !completedItems.includes(i.id));
         setItems(items.filter(i => !completedItems.includes(i.id)));
         setCompletedItems([]);
+        setShowDeleteAlert(!showDeleteAlert);
     }
 
     function handleToggleCompleted(e) {
-        if(e.target.checked) {
+        if (e.target.checked) {
             setItems(items.filter(i => !completedItems.includes(i.id)));
-        }
-        else {
+        } else {
             setItems(totalItems);
         }
     }
@@ -57,7 +57,12 @@ function App(props) {
     }
 
     function handleNotCompleted(item) {
-        setCompletedItems(completedItems.filter(i => !(i===item.id)));
+        setCompletedItems(completedItems.filter(i => !(i === item.id)));
+    }
+
+    function toggleModal() {
+        console.log("toggle");
+        setShowDeleteAlert(!showDeleteAlert);
     }
 
     return <>
@@ -76,7 +81,12 @@ function App(props) {
                    onAddItem={handleAddItem}
         />
         <br/><br/>
-        <button id="delete">Delete completed items </button>
+        {completedItems.length !==0 && <button id="delete" onClick={toggleModal}>Delete completed items</button>}
+        {showDeleteAlert && <DeleteCompletedAlert onClose={toggleModal} onDelete={handleDeleteCompleted}>
+            <div>
+                Are you sure you want to delete all completed items?
+            </div>
+        </DeleteCompletedAlert>}
     </>;
 }
 

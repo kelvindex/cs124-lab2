@@ -20,20 +20,16 @@ h2 {
   margin-left: 30px;
 }
 
-#return {
-  background-color: #86C232;
-  width: 120px;
-  height: 25px;
-}
-
 
 ul {
+  width: 500px;
   list-style: none;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
 }
 
 ul li {
+  width: 900px;
   margin-bottom: 8px;
 }
 
@@ -50,17 +46,7 @@ ul li {
   color: #6B6E70;
 }
 
-#indexItems {
-  list-style: none;
-}
 
-.indexItem {
-  background-color: #86C232;
-  width: 300px;
-  height: 30px;
-  margin-top: 20px;
-  font-size: 18px;
-}
 .taskList {
   list-style: none;
 }
@@ -84,30 +70,6 @@ button {
 .fa-info-circle {
   color: #86C232;
 }
-
-p {
-  margin-left: 3em;
-  margin-bottom: 2em;
-  width: 72%;
-  font-size: 14px;
-}
-
-.guide {
-  color: #86C232;
-  font-weight: 600;
-}
-
-
-.iframes {
-  display: flex;
-  margin-left: 30px;
-}
-
-.iframes p {
-  font-size: 18px;
-  width: 800px;
-}
-
 
 input[type=text] {
   font-family: "Roboto", sans-serif;
@@ -174,9 +136,49 @@ input[type=checkbox]:focus {
   box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
   transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
 }
+
 .toggle:checked {
   border-color: #86C232;
 }
 .toggle:checked:after {
   transform: translatex(20px);
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 300pt;
+  right: 300pt;
+  width: 360px;
+  height: 640px;
+  background-color: rgba(0, 0, 0, .8);
+}
+
+.modal {
+  background-color: #222629;
+  border-radius: 5pt;
+  border-color: black;
+  border-style: solid;
+  margin: 0 auto;
+  top: 50pt;
+  height: 100pt;
+  width: 200pt;
+  padding: 10pt;
+  position: relative;
+  text-align: center;
+  justify-content: center;
+}
+
+.alert-buttons {
+  margin: 0 auto;
+  position: absolute;
+  display: flex;
+  bottom: 15pt;
+  left: 0;
+}
+
+
+.alert-cancel {
+  background-color: #86C232;
 }
