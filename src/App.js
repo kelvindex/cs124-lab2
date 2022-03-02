@@ -4,8 +4,10 @@ import {useState} from "react";
 import {ListItems} from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
-function App() {
-    const [items, setItems] = useState([]);
+function App(props) {
+    const [items, setItems] = useState(props.initialData);
+    const [completedItems, setCompletedItems] = useState([]);
+    const totalItems = props.initialData;
 
     function handleEditItem(itemId, value) {
         console.log("handle edit item");
@@ -15,22 +17,53 @@ function App() {
         //     )
         // );
     }
+
     function handleAddItem(e) {
         if (e.key === 'Enter') {
             console.log("handle add item");
-            setItems([...items, {id: generateUniqueID(), item: e.target.value}]);
+            const newItem = {id: generateUniqueID(), value: e.target.value};
+            setItems([...items, newItem]);
+            totalItems.push(newItem);
         }
     }
 
+    function handleDeleteCompleted() {
+
+    }
+
+    function handleToggleCompleted(e) {
+        console.log("toggle completed items in list", e.target.checked);
+        if(e.target.checked) {
+            setItems(items.filter(i => !completedItems.includes(i.id)));
+        }
+        else {
+            setItems(totalItems);
+        }
+    }
+
+    function handleCompletedItems(item) {
+        console.log("toggle completed");
+        setCompletedItems([...completedItems, item.id]);
+    }
+
+    function handleNotCompleted(item) {
+        console.log("toggle unchecked");
+        setCompletedItems(completedItems.filter(i => !(i===item.id)));
+    }
 
     return <>
         <div id="titleBar">
             <h1>Tasks</h1>
         </div>
-        <span id="uncomplete">Hide Completed Tasks</span> <input type="checkbox" className="toggle"/>
 
-        <ListItems data={items} setItems={setItems}
-                    onEditItem={handleEditItem}
+        <ListItems data={items}
+                   setItems={setItems}
+                   completedItems={completedItems}
+                   setCompletedItems={setCompletedItems}
+                   onCompletedToggle={handleToggleCompleted}
+                   onItemCompleted={handleCompletedItems}
+                   onItemNotCompleted={handleNotCompleted}
+                   onEditItem={handleEditItem}
                    onAddItem={handleAddItem}
         />
         <br/><br/>
