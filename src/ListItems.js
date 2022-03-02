@@ -4,7 +4,7 @@ import ListItem from "./ListItem";
 function ListItems(props) {
 
     return <>
-        <span id="uncomplete">Hide Completed Tasks</span><input type="checkbox" onChange={props.onCompletedToggle} className="toggle"/>
+        <span id="uncomplete">Hide completed tasks</span><input type="checkbox" onChange={props.onCompletedToggle} className="toggle"/>
 
         <ul>
         {props.data.map(i =>
@@ -18,8 +18,7 @@ function ListItems(props) {
         )}
 
         <label id="addItem">
-            <input type="text" className="inputItem" placeholder="Add item"
-                                                                  onKeyPress={props.onAddItem}/>
+            <input type="text" className="inputItem" placeholder="Add item" onKeyPress={props.onAddItem}/>
         </label>
         </ul>
 

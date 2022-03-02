@@ -10,7 +10,6 @@ function App(props) {
     const totalItems = props.initialData;
 
     function handleEditItem(itemId, value, field) {
-        console.log("handle edit item");
         setItems(
             items.map(
                 (item) => (item.id === itemId ? {...item, [field]: value} : item)
@@ -24,6 +23,7 @@ function App(props) {
             const newItem = {id: generateUniqueID(), value: e.target.value};
             setItems([...items, newItem]);
             totalItems.push(newItem);
+            e.target.value = "";
         }
     }
 

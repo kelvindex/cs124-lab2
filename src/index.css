@@ -120,9 +120,6 @@ input[type=text] {
   border-bottom: .25px solid #86C232;
 }
 
-input[class=inputItem]::after {
-  content: attr(placeholder);
-}
 
 input[class=listItemValue] {
   border-bottom: none;
