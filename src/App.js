@@ -19,7 +19,6 @@ function App(props) {
 
     function handleAddItem(e) {
         if (e.key === 'Enter') {
-            console.log("handle add item");
             const newItem = {id: generateUniqueID(), value: e.target.value};
             setItems([...items, newItem]);
             totalItems.push(newItem);
@@ -27,10 +26,16 @@ function App(props) {
         }
     }
 
+    function handleDeleteItem() {
+
+    }
+
     function handleDeleteCompleted() {
         // make pop up box
-        // totalItems.filter(i => !completedItems.includes(i.id)))
-        // setItems(items.filter(i => !completedItems.includes(i.id)));
+
+        totalItems.filter(i => !completedItems.includes(i.id));
+        setItems(items.filter(i => !completedItems.includes(i.id)));
+        setCompletedItems([]);
     }
 
     function handleToggleCompleted(e) {
@@ -44,12 +49,10 @@ function App(props) {
     }
 
     function handleCompletedItems(item) {
-        console.log("toggle completed");
         setCompletedItems([...completedItems, item.id]);
     }
 
     function handleNotCompleted(item) {
-        console.log("toggle unchecked");
         setCompletedItems(completedItems.filter(i => !(i===item.id)));
     }
 
