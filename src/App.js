@@ -7,6 +7,7 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 function App(props) {
     const [items, setItems] = useState(props.initialData);
     const [completedItems, setCompletedItems] = useState([]);
+    const deletedItems = [];
     const totalItems = props.initialData;
 
     function handleEditItem(itemId, value, field) {
@@ -30,6 +31,10 @@ function App(props) {
 
     }
 
+    function handleUndoDelte() {
+
+    }
+
     function handleDeleteCompleted() {
         // make pop up box
 
@@ -39,7 +44,6 @@ function App(props) {
     }
 
     function handleToggleCompleted(e) {
-        console.log("toggle completed items in list", e.target.checked);
         if(e.target.checked) {
             setItems(items.filter(i => !completedItems.includes(i.id)));
         }
