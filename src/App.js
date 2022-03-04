@@ -8,7 +8,7 @@ function App(props) {
     const [items, setItems] = useState(props.initialData);
     const [completedItems, setCompletedItems] = useState([]);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-    const deletedItems = [];
+    // const deletedItems = [];
     const [totalItems, setTotalItems] = useState(props.initialData);
 
     function handleEditItem(itemId, value, field) {
@@ -29,13 +29,13 @@ function App(props) {
         }
     }
 
-    function handleDeleteItem() {
-
-    }
-
-    function handleUndoDelete() {
-
-    }
+    // function handleDeleteItem() {
+    //
+    // }
+    //
+    // function handleUndoDelete() {
+    //
+    // }
 
     function handleDeleteCompleted() {
         setTotalItems(totalItems.filter(i => !completedItems.includes(i.id)));
