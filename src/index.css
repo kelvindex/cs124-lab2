@@ -16,20 +16,15 @@ h1 {
   overflow: hidden;
 }
 
-h2 {
-  margin-left: 30px;
-}
 
 
 ul {
-  width: 500px;
   list-style: none;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
 }
 
 ul li {
-  width: 900px;
   margin-bottom: 8px;
 }
 

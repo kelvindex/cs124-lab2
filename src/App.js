@@ -33,7 +33,7 @@ function App(props) {
 
     }
 
-    function handleUndoDelte() {
+    function handleUndoDelete() {
 
     }
 
