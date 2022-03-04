@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {useState} from "react";
 import DeleteCompletedAlert from "./DeleteCompletedAlert";
@@ -10,7 +9,7 @@ function App(props) {
     const [completedItems, setCompletedItems] = useState([]);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const deletedItems = [];
-    const totalItems = props.initialData;
+    const [totalItems, setTotalItems] = useState(props.initialData);
 
     function handleEditItem(itemId, value, field) {
         setItems(
@@ -18,11 +17,12 @@ function App(props) {
                 (item) => (item.id === itemId ? {...item, [field]: value} : item)
             )
         );
+        setTotalItems(items)
     }
 
     function handleAddItem(e) {
         if (e.key === 'Enter') {
-            const newItem = {id: generateUniqueID(), value: e.target.value}; // add a boolean for completed
+            const newItem = {id: generateUniqueID(), value: e.target.value, completed: false}; // add a boolean for completed
             setItems([...items, newItem]);
             totalItems.push(newItem);
             e.target.value = "";
@@ -38,13 +38,16 @@ function App(props) {
     }
 
     function handleDeleteCompleted() {
-        totalItems.filter(i => !completedItems.includes(i.id));
+        setTotalItems(totalItems.filter(i => !completedItems.includes(i.id)));
         setItems(items.filter(i => !completedItems.includes(i.id)));
         setCompletedItems([]);
         setShowDeleteAlert(!showDeleteAlert);
+        console.log(items);
+        console.log(totalItems);
     }
 
     function handleToggleCompleted(e) {
+        console.log(totalItems);
         if (e.target.checked) {
             setItems(items.filter(i => !completedItems.includes(i.id)));
         } else {
@@ -54,14 +57,15 @@ function App(props) {
 
     function handleCompletedItems(item) {
         setCompletedItems([...completedItems, item.id]);
+        item.completed = true;
     }
 
     function handleNotCompleted(item) {
         setCompletedItems(completedItems.filter(i => !(i === item.id)));
+        item.completed = false;
     }
 
     function toggleModal() {
-        console.log("toggle");
         setShowDeleteAlert(!showDeleteAlert);
     }
 
