@@ -1,7 +1,7 @@
 {
   "name": "test-react",
   "version": "0.1.0",
-  "homepage":"http://kelvindex.github.io/cs124-lab2",
+  "homepage": "http://kelvindex.github.io/cs124-lab2",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
@@ -38,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
   }
 }
