@@ -17,7 +17,7 @@ potentially more accessible color schemes available
 be eminently lost
 + Toggle for show or hide items moreso indicates modality and indicates to the user
 that the action can be done and undone
-+ Pencil for editing. Disappears in editing more.
++ ~~Pencil for editing. Disappears in editing more.~~
 + Checkbox for list items so they can be marked and unmarked depending on status of completion
 + Editing button for top level icon
 
@@ -32,7 +32,10 @@ buttons on the page as such:
 
 ![Image of task list page](index.png)
 
-Since there is no longer a walk through element, our design is much simpler.
+Since there is no longer a walk through element, our design is much simpler. We also
+got rid of some of our icons and buttons so for editing an entry, the user just clicks
+on the entry itself instead of an icon; for adding one, the user just hits enter ass opposed
+to a button.
 
 #Challenges
 A lot of difficulties with styling and making certain elements work. For
