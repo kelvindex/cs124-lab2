@@ -9,7 +9,7 @@ This simple app allows the following functionalities:
 
 Here is an example of what a task list would look like with the current design:
 
-![](../design/checked_items.png)
+![](./design/checked_items.png)
 
 In order to run app, clone repository, get the appropriate npm dependencies, and if using
 an IDE like Webstorm, you should be able to run the app as displayed in the screenshot.
