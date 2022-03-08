@@ -1,8 +1,8 @@
-#Decisions
+# Decisions
 Here we describe different design elements that we decided on including color scheme,
 icons and how these attributes fit into the design
 
-###Color Scheme
+### Color Scheme
 + \#25274D for background color
 + White for text so legibility will be easy against the black background
 + \#86C232 for header so it stands out
@@ -12,7 +12,7 @@ icons and how these attributes fit into the design
 Currently, the app only supports this "dark mode" but future iterations could have different, 
 potentially more accessible color schemes available
 
-###Icons
+### Icons
 + Button for deleting; red so it signals something drastic is happening and data will
 be eminently lost
 + Toggle for show or hide items moreso indicates modality and indicates to the user
@@ -22,7 +22,7 @@ that the action can be done and undone
 + Editing button for top level icon
 
 
-#Alternatives
+# Alternatives
 We briefly considered using different color schemes that were
 brighter and more fun, but we figured it would ultimately be too
 distracting. 
@@ -37,7 +37,7 @@ got rid of some of our icons and buttons so for editing an entry, the user just 
 on the entry itself instead of an icon; for adding one, the user just hits enter ass opposed
 to a button.
 
-#Challenges
+# Challenges
 A lot of difficulties with styling and making certain elements work. For
 instance the toggle button was a lot more code than anticipated. We
 also considered making the checkmarks more in tune with the color scheme
@@ -62,7 +62,7 @@ switching to "textarea" refactor or figuring out different ways to manipulate th
 tag within css.
 
 
-#Accomplishments
+# Accomplishments
 The final output of our pages appears pretty accessible and it displays pretty nicely on different screens.
 Some key features include:
 
