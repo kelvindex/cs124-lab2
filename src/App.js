@@ -8,7 +8,6 @@ function App(props) {
     const [items, setItems] = useState(props.initialData);
     const [completedItems, setCompletedItems] = useState([]);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-    // const deletedItems = [];
     const [totalItems, setTotalItems] = useState(props.initialData);
 
     function handleEditItem(itemId, value, field) {
@@ -22,20 +21,12 @@ function App(props) {
 
     function handleAddItem(e) {
         if (e.key === 'Enter') {
-            const newItem = {id: generateUniqueID(), value: e.target.value, completed: false}; // add a boolean for completed
+            const newItem = {id: generateUniqueID(), value: e.target.value, completed: false};
             setItems([...items, newItem]);
             setTotalItems([...totalItems, newItem]);
             e.target.value = "";
         }
     }
-
-    // function handleDeleteItem() {
-    //
-    // }
-    //
-    // function handleUndoDelete() {
-    //
-    // }
 
     function handleDeleteCompleted() {
         setTotalItems(totalItems.filter(i => !completedItems.includes(i.id)));
