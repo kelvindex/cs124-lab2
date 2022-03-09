@@ -19,9 +19,9 @@
     "build": "node_modules/.bin/react-scripts build",
     "test": "node_modules/.bin/react-scripts test",
     "eject": "node_modules/.bin/react-scripts eject",
-    "install-dependencies": "node_modules/.bin/npm install firebase-tools",
-    "firebase-login": "node_modules/.bin/npx firebase login",
-    "firebase-init": "node_modules/.bin/npx firebase init"
+    "install-dependencies": "npm install firebase-tools",
+    "firebase-login": "npx firebase login",
+    "firebase-init": "npx firebase init"
   },
   "eslintConfig": {
     "extends": [
