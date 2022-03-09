@@ -1,4 +1,3 @@
-import {useState} from "react";
 import ListItem from "./ListItem";
 
 function ListItems(props) {
