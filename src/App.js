@@ -5,22 +5,22 @@ import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+// import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAx_Uoa4hi54nVFG2FtmKXlQzZbmQbIGng",
-    authDomain: "cs124-lab3-6962e.firebaseapp.com",
-    projectId: "cs124-lab3-6962e",
-    storageBucket: "cs124-lab3-6962e.appspot.com",
-    messagingSenderId: "275550647862",
-    appId: "1:275550647862:web:d229d0a8cfca991d114a97"
-};
+// const firebaseConfig = {
+//     apiKey: "AIzaSyAx_Uoa4hi54nVFG2FtmKXlQzZbmQbIGng",
+//     authDomain: "cs124-lab3-6962e.firebaseapp.com",
+//     projectId: "cs124-lab3-6962e",
+//     storageBucket: "cs124-lab3-6962e.appspot.com",
+//     messagingSenderId: "275550647862",
+//     appId: "1:275550647862:web:d229d0a8cfca991d114a97"
+// };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
 
 function App(props) {
     const [items, setItems] = useState(props.initialData);
