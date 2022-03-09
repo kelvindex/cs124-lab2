@@ -24,7 +24,7 @@ function App(props) {
         if (e.key === 'Enter') {
             const newItem = {id: generateUniqueID(), value: e.target.value, completed: false}; // add a boolean for completed
             setItems([...items, newItem]);
-            totalItems.push(newItem);
+            setTotalItems([...totalItems, newItem]);
             e.target.value = "";
         }
     }
