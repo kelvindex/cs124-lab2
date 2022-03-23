@@ -5,8 +5,8 @@ import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import {initializeApp} from "firebase/app";
+import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore"; // useCollection
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -26,21 +26,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const collectionName = "Tasks";
 
-function App(props) {
-    const [items, setItems] = useState(props.initialData);
+function App() {
     const [completedToggle, setCompletedToggle] = useState(false);
-    const completedItems = items.filter(i => i.completed);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
     const q = query(collection(db, collectionName));
     const [tasks, loading, error] = useCollectionData(q);
 
     function handleEditItem(itemId, value, field) {
-        // setItems(
-        //     items.map(
-        //         (item) => (item.id === itemId ? {...item, [field]: value} : item)
-        //     )
-        // );
         setDoc(doc(db, collectionName, itemId),
             {[field]: value}, {merge: true});
     }
@@ -49,14 +42,14 @@ function App(props) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
             const newItem = {id: newId, value: value, completed: false};
-            // setItems([...items, newItem]);
             setDoc(doc(db, collectionName, newId), newItem);
         }
     }
 
     function handleDeleteCompleted() {
-        // setItems(items.filter(i => !i.completed));
-        tasks.forEach(i => {if (i.completed) deleteDoc(doc(db, collectionName, i.id))});
+        tasks.forEach(i => {
+            if (i.completed) deleteDoc(doc(db, collectionName, i.id))
+        });
         toggleModal(); // close pop up
     }
 
@@ -66,7 +59,6 @@ function App(props) {
 
     function handleChangeCompletedItems(item) {
         updateDoc(doc(db, collectionName, item.id), {completed: !item.completed});
-        // setItems(items.map(i => i.id === item.id ? {... i, completed: !i.completed} : i));
     }
 
     function toggleModal() {
@@ -85,16 +77,16 @@ function App(props) {
             <h1>Tasks</h1>
         </div>
 
-        <ListItems data={completedToggle ? items.filter(i => !i.completed) : items}
-                   setItems={setItems}
-                   completedItems={completedItems}
+        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
                    onCompletedToggle={handleToggleCompleted}
                    onChangeCompletedItems={handleChangeCompletedItems}
                    onEditItem={handleEditItem}
                    onAddItem={handleAddItem}
         />
+
         <br/><br/>
-        {completedItems.length !==0 && <button id="delete" onClick={toggleModal}>Delete completed items</button>}
+        {tasks.filter(i => i.completed).length !== 0 && !completedToggle &&
+            <button id="delete" onClick={toggleModal}>Delete completed items</button>}
         {showDeleteAlert && <DeleteCompletedAlert onClose={toggleModal} onDelete={handleDeleteCompleted}>
             <div>
                 Are you sure you want to delete all completed items?
