@@ -66,10 +66,11 @@ function App() {
     }
 
     if (loading) {
-        return "loading...";
+        return <div className="load">"loading..."</div>;
     }
 
     if (error) {
+        console.log(error);
         return "there's been an error"
     }
     return <>
