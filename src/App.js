@@ -5,28 +5,32 @@ import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
+import { getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
+// import {useCollection, useCollectionData} from "react-firebase-hooks/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-// const firebaseConfig = {
-//     apiKey: "AIzaSyAx_Uoa4hi54nVFG2FtmKXlQzZbmQbIGng",
-//     authDomain: "cs124-lab3-6962e.firebaseapp.com",
-//     projectId: "cs124-lab3-6962e",
-//     storageBucket: "cs124-lab3-6962e.appspot.com",
-//     messagingSenderId: "275550647862",
-//     appId: "1:275550647862:web:d229d0a8cfca991d114a97"
-// };
+const firebaseConfig = {
+    apiKey: "AIzaSyAx_Uoa4hi54nVFG2FtmKXlQzZbmQbIGng",
+    authDomain: "cs124-lab3-6962e.firebaseapp.com",
+    projectId: "cs124-lab3-6962e",
+    storageBucket: "cs124-lab3-6962e.appspot.com",
+    messagingSenderId: "275550647862",
+    appId: "1:275550647862:web:d229d0a8cfca991d114a97"
+};
 
 // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const collectionName = "Tasks";
 
 function App(props) {
     const [items, setItems] = useState(props.initialData);
-    const [completedItems, setCompletedItems] = useState([]);
+    const [completedToggle, setCompletedToggle] = useState(false);
+    const completedItems = items.filter(i => i.completed);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-    const [totalItems, setTotalItems] = useState(props.initialData);
 
     function handleEditItem(itemId, value, field) {
         setItems(
@@ -34,44 +38,26 @@ function App(props) {
                 (item) => (item.id === itemId ? {...item, [field]: value} : item)
             )
         );
-        setTotalItems(items)
     }
 
-    function handleAddItem(e) {
-        if (e.key === 'Enter') {
-            const newItem = {id: generateUniqueID(), value: e.target.value, completed: false};
+    function handleAddItem(key, value) {
+        if (key === 'Enter') {
+            const newItem = {id: generateUniqueID(), value: value, completed: false};
             setItems([...items, newItem]);
-            setTotalItems([...totalItems, newItem]);
-            e.target.value = "";
         }
     }
 
     function handleDeleteCompleted() {
-        setTotalItems(totalItems.filter(i => !completedItems.includes(i.id)));
-        setItems(items.filter(i => !completedItems.includes(i.id)));
-        setCompletedItems([]);
-        setShowDeleteAlert(!showDeleteAlert);
-        console.log(items);
-        console.log(totalItems);
+        setItems(items.filter(i => !i.completed));
+        toggleModal(); // close pop up
     }
 
-    function handleToggleCompleted(e) {
-        console.log(totalItems);
-        if (e.target.checked) {
-            setItems(items.filter(i => !completedItems.includes(i.id)));
-        } else {
-            setItems(totalItems);
-        }
+    function handleToggleCompleted() {
+        setCompletedToggle(!completedToggle);
     }
 
-    function handleCompletedItems(item) {
-        setCompletedItems([...completedItems, item.id]);
-        item.completed = true;
-    }
-
-    function handleNotCompleted(item) {
-        setCompletedItems(completedItems.filter(i => !(i === item.id)));
-        item.completed = false;
+    function handleChangeCompletedItems(item) {
+        setItems(items.map(i => i.id === item.id ? {... i, completed: !i.completed} : i));
     }
 
     function toggleModal() {
@@ -83,13 +69,11 @@ function App(props) {
             <h1>Tasks</h1>
         </div>
 
-        <ListItems data={items}
+        <ListItems data={completedToggle ? items.filter(i => !i.completed) : items}
                    setItems={setItems}
                    completedItems={completedItems}
-                   setCompletedItems={setCompletedItems}
                    onCompletedToggle={handleToggleCompleted}
-                   onItemCompleted={handleCompletedItems}
-                   onItemNotCompleted={handleNotCompleted}
+                   onChangeCompletedItems={handleChangeCompletedItems}
                    onEditItem={handleEditItem}
                    onAddItem={handleAddItem}
         />

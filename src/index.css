@@ -16,8 +16,6 @@ h1 {
   overflow: hidden;
 }
 
-
-
 ul {
   list-style: none;
   font-family: "Roboto", sans-serif;
@@ -40,12 +38,6 @@ ul li {
   font-size: 14px;
   color: #6B6E70;
 }
-
-
-.taskList {
-  list-style: none;
-}
-
 
 button {
   margin-left: 3em;
