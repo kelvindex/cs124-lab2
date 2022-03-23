@@ -7,7 +7,7 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
-// import {useCollection, useCollectionData} from "react-firebase-hooks/firestore";
+import {useCollectionData} from "react-firebase-hooks/firestore"; // useCollection
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,23 +32,31 @@ function App(props) {
     const completedItems = items.filter(i => i.completed);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
+    const q = query(collection(db, collectionName));
+    const [tasks, loading, error] = useCollectionData(q);
+
     function handleEditItem(itemId, value, field) {
-        setItems(
-            items.map(
-                (item) => (item.id === itemId ? {...item, [field]: value} : item)
-            )
-        );
+        // setItems(
+        //     items.map(
+        //         (item) => (item.id === itemId ? {...item, [field]: value} : item)
+        //     )
+        // );
+        setDoc(doc(db, collectionName, itemId),
+            {[field]: value}, {merge: true});
     }
 
     function handleAddItem(key, value) {
         if (key === 'Enter') {
-            const newItem = {id: generateUniqueID(), value: value, completed: false};
-            setItems([...items, newItem]);
+            const newId = generateUniqueID();
+            const newItem = {id: newId, value: value, completed: false};
+            // setItems([...items, newItem]);
+            setDoc(doc(db, collectionName, newId), newItem);
         }
     }
 
     function handleDeleteCompleted() {
-        setItems(items.filter(i => !i.completed));
+        // setItems(items.filter(i => !i.completed));
+        tasks.forEach(i => {if (i.completed) deleteDoc(doc(db, collectionName, i.id))});
         toggleModal(); // close pop up
     }
 
@@ -57,13 +65,21 @@ function App(props) {
     }
 
     function handleChangeCompletedItems(item) {
-        setItems(items.map(i => i.id === item.id ? {... i, completed: !i.completed} : i));
+        updateDoc(doc(db, collectionName, item.id), {completed: !item.completed});
+        // setItems(items.map(i => i.id === item.id ? {... i, completed: !i.completed} : i));
     }
 
     function toggleModal() {
         setShowDeleteAlert(!showDeleteAlert);
     }
 
+    if (loading) {
+        return "loading...";
+    }
+
+    if (error) {
+        return "there's been an error"
+    }
     return <>
         <div id="titleBar">
             <h1>Tasks</h1>
