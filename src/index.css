@@ -170,3 +170,8 @@ input[type=checkbox]:focus {
 .alert-cancel {
   background-color: #86C232;
 }
+
+.item-value {
+  width: 200px;
+  overflow-wrap: break-word;
+}

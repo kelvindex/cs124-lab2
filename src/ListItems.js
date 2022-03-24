@@ -1,5 +1,5 @@
 import ListItem from "./ListItem";
-
+import {FaPlus} from "react-icons/fa";
 function ListItems(props) {
 
     return <>
@@ -16,10 +16,7 @@ function ListItems(props) {
                 />
             )}
 
-        <label id="addItem">
-            <input type="text" className="inputItem" placeholder="Add item"
-                   onKeyPress={(e) => {props.onAddItem(e.key, e.target.value); if (e.key === 'Enter') {e.target.value = ""}}}/>
-        </label>
+
         </ul>
 
 

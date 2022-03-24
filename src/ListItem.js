@@ -1,3 +1,5 @@
+import { FaEdit } from "react-icons/fa";
+
 function ListItem(props) {
     const listItem = props.item;
 
@@ -5,7 +7,9 @@ function ListItem(props) {
         <input type="checkbox"
                onChange={() => props.onChangeCompletedItems(listItem)}
                checked={listItem.completed}/>
-        <input type="text" className="listItemValue" value={listItem.value} onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>
+        <span className="item-value">{listItem.value}</span>
+        {/*<input type="text" className="listItemValue"  onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>*/}
+    {/*<button className="editButton" onClick={}><FaEdit color="#86C232"/></button>*/}
     </li>
 
 }

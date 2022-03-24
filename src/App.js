@@ -7,7 +7,9 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
 import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc} from "firebase/firestore";
-import {useCollectionData} from "react-firebase-hooks/firestore"; // useCollection
+import {useCollectionData} from "react-firebase-hooks/firestore";
+import {FaPlus} from "react-icons/fa";
+import AddPopUp from "./AddPopUp"; // useCollection
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,6 +31,7 @@ const collectionName = "Tasks";
 function App() {
     const [completedToggle, setCompletedToggle] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [addPopUp, setAddPopUp] = useState(false);
 
     const q = query(collection(db, collectionName));
     const [tasks, loading, error] = useCollectionData(q);
@@ -51,6 +54,10 @@ function App() {
             if (i.completed) deleteDoc(doc(db, collectionName, i.id))
         });
         toggleModal(); // close pop up
+    }
+
+    function handleAddPopUp() {
+        setAddPopUp(!addPopUp);
     }
 
     function handleToggleCompleted() {
@@ -85,6 +92,8 @@ function App() {
                    onAddItem={handleAddItem}
         />
 
+        <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>
+        {addPopUp && <AddPopUp onAddItem={handleAddItem} onClose={handleAddPopUp}><h4>New item</h4></AddPopUp>}
         <br/><br/>
         {tasks.filter(i => i.completed).length !== 0 && !completedToggle &&
             <button id="delete" onClick={toggleModal}>Delete completed items</button>}
