@@ -4,10 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const initialData = [];
 ReactDOM.render(
   <React.StrictMode>
-    <App initialData={initialData}/>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
