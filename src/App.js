@@ -24,15 +24,13 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionName = "Tasks3";
-const completedCollectionName = "completedTasks";
+const collectionName = "taskList";
 
-function App(props) {
+function App() {
     // const [completedToggle, setCompletedToggle] = useState(false);
     const q = query(collection(db, collectionName));
     const [tasks, loading, error] = useCollectionData(q);
 
-    const qC = query(collection(db, completedCollectionName));
 
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
