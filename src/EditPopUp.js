@@ -1,5 +1,3 @@
-import {useState} from "react";
-
 function EditPopUp(props) {
     const data = props.listItemData.split(" ");
     const id = data[0];
