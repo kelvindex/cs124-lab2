@@ -6,7 +6,7 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore, query, collection, setDoc, doc, deleteDoc } from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore"; // useCollection
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -33,7 +33,6 @@ function App(props) {
     const [tasks, loading, error] = useCollectionData(q);
 
     const qC = query(collection(db, completedCollectionName));
-    const [tasksC, loadingC, errorC] = useCollectionData(qC);
 
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
@@ -84,7 +83,6 @@ function App(props) {
         </div>
 
         <ListItems data={tasks}
-                   completed={tasksC}
                    onCompletedToggle={handleToggleCompleted}
                    onItemSelected={handleItemSelected}
                    onEditItem={handleEditItem}
