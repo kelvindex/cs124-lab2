@@ -208,3 +208,9 @@ h4 {
   margin-bottom: 5px;
   padding: 3px
 }
+
+.edit-button {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}

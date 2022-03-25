@@ -13,7 +13,10 @@ function ListItems(props) {
                 <ListItem item={i}
                           key={i.id}
                           onItemSelected={props.onItemSelected}
+                          onToggleEditItem={props.onToggleEditItem}
+                          onChangeCompletedItems={props.onChangeCompletedItems}
                           isCompleted={i.completed}
+                          onGetListItemData={props.onGetListItemData}
                           onEditItem={props.onEditItem}
                           priority={i.priority}
                 />

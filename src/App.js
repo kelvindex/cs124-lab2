@@ -10,6 +10,7 @@ import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orde
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FaPlus} from "react-icons/fa";
 import AddPopUp from "./AddPopUp";
+import EditPopUp from "./EditPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,8 +33,10 @@ function App() {
     const [completedToggle, setCompletedToggle] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [addPopUp, setAddPopUp] = useState(false);
+    const [editPopUp, setEditPopUp] = useState(false);
     const [priorityValue, setPriorityValue] = useState(0);
     const [orderByPriority, setOrderByPriority] = useState(false);
+    const [listItemData, setListItemData] = useState("");
 
     const q = query(collection(db, collectionName));
     const [tasks, loading, error] = useCollectionData(q);
@@ -42,8 +45,16 @@ function App() {
     const [priorityOrderedTasks, priorityLoading, priorityError] = useCollectionData(priorityQ);
 
     function handleEditItem(itemId, value, field) {
-        setDoc(doc(db, collectionName, itemId),
-            {[field]: value}, {merge: true});
+
+            setDoc(doc(db, collectionName, itemId),
+                {[field]: value}, {merge: true});
+
+            handleEditPopUp();
+
+    }
+
+    function handleEditPopUp() {
+        setEditPopUp(!editPopUp)
     }
 
     function handleAddItem(key, value) {
@@ -109,6 +120,12 @@ function App() {
         setOrderByPriority(!orderByPriority);
     }
 
+
+    function getListItemData(listItemData) {
+        setListItemData(listItemData);
+        console.log("data: ", listItemData);
+    }
+
     return <>
         <div id="titleBar">
             <h1>Tasks</h1>
@@ -119,9 +136,10 @@ function App() {
                    onDeselectAll={handleDeselectAll}
                    onCompletedToggle={handleToggleCompleted}
                    onChangeCompletedItems={handleChangeCompletedItems}
-                   onEditItem={handleEditItem}
+                   onToggleEditItem={handleEditPopUp}
                    onAddItem={handleAddItem}
                    onOrderByPriority={handleOrderByPriority}
+                   onGetListItemData={getListItemData}
                    priority={priorityValue}
         />
 
@@ -131,6 +149,13 @@ function App() {
         <br/><br/>
         {tasks.filter(i => i.completed).length !== 0 && !completedToggle &&
             <button id="delete" onClick={toggleModal}>Delete completed items</button>}
+
+        {editPopUp && <EditPopUp onClose={handleEditPopUp}
+                                 onEditPriority={handleEditItem}
+                                 onFinishEdit={handleEditItem}
+                                 listItemData={listItemData}>
+            <h4>Edit item</h4></EditPopUp>}
+
         {showDeleteAlert && <DeleteCompletedAlert onClose={toggleModal} onDelete={handleDeleteCompleted}>
             <div>
                 Are you sure you want to delete all completed items?
