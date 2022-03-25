@@ -6,7 +6,7 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc} from "firebase/firestore";
+import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orderBy} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FaPlus} from "react-icons/fa";
 import AddPopUp from "./AddPopUp";
@@ -33,19 +33,23 @@ function App() {
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [addPopUp, setAddPopUp] = useState(false);
     const [priorityValue, setPriorityValue] = useState(0);
+    const [orderByPriority, setOrderByPriority] = useState(false);
 
     const q = query(collection(db, collectionName));
     const [tasks, loading, error] = useCollectionData(q);
+
+    const priorityQ = query(collection(db, collectionName), orderBy("priority", "desc"));
+    const [priorityOrderedTasks, priorityLoading, priorityError] = useCollectionData(priorityQ);
 
     function handleEditItem(itemId, value, field) {
         setDoc(doc(db, collectionName, itemId),
             {[field]: value}, {merge: true});
     }
 
-    function handleAddItem(key, value, priority) {
+    function handleAddItem(key, value) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const newItem = {id: newId, value: value, completed: false, priority: priority};
+            const newItem = {id: newId, value: value, completed: false, priority: priorityValue};
             setDoc(doc(db, collectionName, newId), newItem);
         }
     }
@@ -94,18 +98,30 @@ function App() {
         return "there's been an error"
     }
 
+    if (priorityLoading) {
+        return <div className="load">"loading..."</div>;
+    }
+    if (priorityError) {
+        return "there's been an error"
+    }
+
+    function handleOrderByPriority() {
+        setOrderByPriority(!orderByPriority);
+    }
+
     return <>
         <div id="titleBar">
             <h1>Tasks</h1>
         </div>
 
-        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
+        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks || orderByPriority ? priorityOrderedTasks : tasks}
                    onSelectAll={handleSelectAll}
                    onDeselectAll={handleDeselectAll}
                    onCompletedToggle={handleToggleCompleted}
                    onChangeCompletedItems={handleChangeCompletedItems}
                    onEditItem={handleEditItem}
                    onAddItem={handleAddItem}
+                   onOrderByPriority={handleOrderByPriority}
                    priority={priorityValue}
         />
 

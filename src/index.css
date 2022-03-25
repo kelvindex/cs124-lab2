@@ -197,3 +197,14 @@ input[type=checkbox]:focus {
 h4 {
   vertical-align: top;
 }
+
+.add-button {
+  background-color: #86C232;
+}
+
+.order-priority {
+  background-color: #86C232;
+  margin-top: 8px;
+  margin-bottom: 5px;
+  padding: 3px
+}
