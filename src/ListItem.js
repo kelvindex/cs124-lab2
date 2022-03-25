@@ -5,9 +5,9 @@ function ListItem(props) {
 
     return <li onDoubleClick={props.onEditItem}>
         <input type="checkbox"
+               id={listItem.id}
                onChange={() => props.onChangeCompletedItems(listItem)}
-               checked={listItem.completed}/>
-        <span className="item-value">{listItem.value}</span>
+               checked={listItem.completed}/> <label htmlFor={listItem.id} className={"item-value"}>{"!".repeat(props.priority)} {listItem.value}</label>
         {/*<input type="text" className="listItemValue"  onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>*/}
     {/*<button className="editButton" onClick={}><FaEdit color="#86C232"/></button>*/}
     </li>

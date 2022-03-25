@@ -172,6 +172,28 @@ input[type=checkbox]:focus {
 }
 
 .item-value {
-  width: 200px;
-  overflow-wrap: break-word;
+  width : 70%;
+  overflow-wrap: normal;
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+}
+
+.add-modal {
+  background-color: #222629;
+  border-radius: 5pt;
+  border-color: black;
+  border-style: solid;
+  margin: 0 auto;
+  top: 30pt;
+  height: 100pt;
+  width: 200pt;
+  padding: 1pt 15pt 80px;
+  position: relative;
+  text-align: center;
+
+}
+
+h4 {
+  vertical-align: top;
 }

@@ -9,7 +9,7 @@ import {initializeApp} from "firebase/app";
 import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FaPlus} from "react-icons/fa";
-import AddPopUp from "./AddPopUp"; // useCollection
+import AddPopUp from "./AddPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,6 +32,7 @@ function App() {
     const [completedToggle, setCompletedToggle] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [addPopUp, setAddPopUp] = useState(false);
+    const [priorityValue, setPriorityValue] = useState(0);
 
     const q = query(collection(db, collectionName));
     const [tasks, loading, error] = useCollectionData(q);
@@ -41,10 +42,10 @@ function App() {
             {[field]: value}, {merge: true});
     }
 
-    function handleAddItem(key, value) {
+    function handleAddItem(key, value, priority) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const newItem = {id: newId, value: value, completed: false};
+            const newItem = {id: newId, value: value, completed: false, priority: priority};
             setDoc(doc(db, collectionName, newId), newItem);
         }
     }
@@ -72,6 +73,18 @@ function App() {
         setShowDeleteAlert(!showDeleteAlert);
     }
 
+    function handleSelectAll() {
+        tasks.forEach(i => i.completed === false ? updateDoc(doc(db, collectionName, i.id), {completed: true}) : i);
+    }
+
+    function handleDeselectAll() {
+        tasks.forEach(i => i.completed === true ? updateDoc(doc(db, collectionName, i.id), {completed: false}) : i);
+    }
+
+    function handleSetPriorityValue(priority) {
+        setPriorityValue(priority);
+    }
+
     if (loading) {
         return <div className="load">"loading..."</div>;
     }
@@ -80,20 +93,25 @@ function App() {
         console.log(error);
         return "there's been an error"
     }
+
     return <>
         <div id="titleBar">
             <h1>Tasks</h1>
         </div>
 
         <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
+                   onSelectAll={handleSelectAll}
+                   onDeselectAll={handleDeselectAll}
                    onCompletedToggle={handleToggleCompleted}
                    onChangeCompletedItems={handleChangeCompletedItems}
                    onEditItem={handleEditItem}
                    onAddItem={handleAddItem}
+                   priority={priorityValue}
         />
 
         <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>
-        {addPopUp && <AddPopUp onAddItem={handleAddItem} onClose={handleAddPopUp}><h4>New item</h4></AddPopUp>}
+        {addPopUp && <AddPopUp onAddItem={handleAddItem} onClose={handleAddPopUp} priority={priorityValue} onSetPriority={handleSetPriorityValue}>
+            <h4>New item</h4></AddPopUp>}
         <br/><br/>
         {tasks.filter(i => i.completed).length !== 0 && !completedToggle &&
             <button id="delete" onClick={toggleModal}>Delete completed items</button>}

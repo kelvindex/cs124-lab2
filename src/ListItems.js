@@ -1,5 +1,5 @@
 import ListItem from "./ListItem";
-import {FaPlus} from "react-icons/fa";
+
 function ListItems(props) {
 
     return <>
@@ -13,13 +13,11 @@ function ListItems(props) {
                           isCompleted={i.completed}
                           key={i.id}
                           onEditItem={props.onEditItem}
+                          priority={props.priority}
                 />
             )}
 
-
         </ul>
-
-
     </>
 
 }
