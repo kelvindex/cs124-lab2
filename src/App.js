@@ -24,23 +24,25 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionName = "Tasks";
+const collectionName = "Tasks3";
+const completedCollectionName = "completedTasks";
 
 function App(props) {
-    const [items, setItems] = useState(props.initialData);
-    const [completedToggle, setCompletedToggle] = useState(false);
-    const completedItems = items.filter(i => i.completed);
-    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-
+    // const [completedToggle, setCompletedToggle] = useState(false);
     const q = query(collection(db, collectionName));
     const [tasks, loading, error] = useCollectionData(q);
 
+    const qC = query(collection(db, completedCollectionName));
+    const [tasksC, loadingC, errorC] = useCollectionData(qC);
+
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+
+    function handleItemSelected(item) {
+        setDoc(doc(db, collectionName, item.id),
+            {completed: !item.completed}, {merge: true});
+    }
+
     function handleEditItem(itemId, value, field) {
-        // setItems(
-        //     items.map(
-        //         (item) => (item.id === itemId ? {...item, [field]: value} : item)
-        //     )
-        // );
         setDoc(doc(db, collectionName, itemId),
             {[field]: value}, {merge: true});
     }
@@ -49,25 +51,21 @@ function App(props) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
             const newItem = {id: newId, value: value, completed: false};
-            // setItems([...items, newItem]);
             setDoc(doc(db, collectionName, newId), newItem);
         }
     }
 
     function handleDeleteCompleted() {
-        // setItems(items.filter(i => !i.completed));
-        tasks.forEach(i => {if (i.completed) deleteDoc(doc(db, collectionName, i.id))});
+        tasks.forEach(i => i.completed ? deleteDoc(doc(db, collectionName, i.id)) : i);
         toggleModal(); // close pop up
     }
 
     function handleToggleCompleted() {
-        setCompletedToggle(!completedToggle);
+        // tasks.forEach(i => i.completed ? setDoc(doc(db, completedCollectionName, i.id)) : i);
+        tasks.forEach(i => i.completed ? deleteDoc(doc(db, collectionName, i.id)) : i);
     }
 
-    function handleChangeCompletedItems(item) {
-        updateDoc(doc(db, collectionName, item.id), {completed: !item.completed});
-        // setItems(items.map(i => i.id === item.id ? {... i, completed: !i.completed} : i));
-    }
+
 
     function toggleModal() {
         setShowDeleteAlert(!showDeleteAlert);
@@ -85,16 +83,15 @@ function App(props) {
             <h1>Tasks</h1>
         </div>
 
-        <ListItems data={completedToggle ? items.filter(i => !i.completed) : items}
-                   setItems={setItems}
-                   completedItems={completedItems}
+        <ListItems data={tasks}
+                   completed={tasksC}
                    onCompletedToggle={handleToggleCompleted}
-                   onChangeCompletedItems={handleChangeCompletedItems}
+                   onItemSelected={handleItemSelected}
                    onEditItem={handleEditItem}
                    onAddItem={handleAddItem}
         />
         <br/><br/>
-        {completedItems.length !==0 && <button id="delete" onClick={toggleModal}>Delete completed items</button>}
+        {<button id="delete" onClick={toggleModal}>Delete completed items</button>}
         {showDeleteAlert && <DeleteCompletedAlert onClose={toggleModal} onDelete={handleDeleteCompleted}>
             <div>
                 Are you sure you want to delete all completed items?

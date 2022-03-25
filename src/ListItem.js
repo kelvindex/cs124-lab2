@@ -3,8 +3,8 @@ function ListItem(props) {
 
     return <li onDoubleClick={props.onEditItem}>
         <input type="checkbox"
-               onChange={() => props.onChangeCompletedItems(listItem)}
-               checked={listItem.completed}/>
+               onChange={() => props.onItemSelected(listItem)}
+               checked={props.isCompleted}/>
         <input type="text" className="listItemValue" value={listItem.value} onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>
     </li>
 

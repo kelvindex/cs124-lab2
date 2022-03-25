@@ -9,9 +9,9 @@ function ListItems(props) {
         <ul>
             {props.data.map(i =>
                 <ListItem item={i}
-                          onChangeCompletedItems={props.onChangeCompletedItems}
-                          isCompleted={i.completed}
                           key={i.id}
+                          onItemSelected={props.onItemSelected}
+                          isCompleted={i.completed}
                           onEditItem={props.onEditItem}
                 />
             )}
