@@ -131,7 +131,7 @@ function App() {
             <h1>Tasks</h1>
         </div>
 
-        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks || orderByPriority ? priorityOrderedTasks : tasks}
+        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks && orderByPriority ? priorityOrderedTasks : tasks}
                    onSelectAll={handleSelectAll}
                    onDeselectAll={handleDeselectAll}
                    onCompletedToggle={handleToggleCompleted}
