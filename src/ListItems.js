@@ -7,7 +7,9 @@ function ListItems(props) {
                                                                 className="toggle"/>
 
         <br/>
-        <button className="order-priority" onClick={props.onOrderByPriority}>Order by priority</button>
+        <button className="order-priority" onClick={() => props.onOrderBy("priority")}>Order by priority</button>
+        <button className="order-priority" onClick={() => props.onOrderBy("name")}>Order by name</button>
+        <button className="order-priority" onClick={() => props.onOrderBy("time")}>Order by time</button>
         <ul>
             {props.data.map(i =>
                 <ListItem item={i}

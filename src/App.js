@@ -6,7 +6,7 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orderBy} from "firebase/firestore";
+import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FaPlus} from "react-icons/fa";
 import AddPopUp from "./AddPopUp";
@@ -35,14 +35,17 @@ function App() {
     const [addPopUp, setAddPopUp] = useState(false);
     const [editPopUp, setEditPopUp] = useState(false);
     const [priorityValue, setPriorityValue] = useState(0);
-    const [orderByPriority, setOrderByPriority] = useState(false);
+    
     const [listItemData, setListItemData] = useState("");
+    
+    const priorityOrder = ["priority", "desc"];
+    const nameOrder = ["value", "asc"];
+    const timeOrder = ["time", "asc"];
+    const [orderType, setOrderType] = useState(timeOrder);
 
-    const q = query(collection(db, collectionName));
-    const [tasks, loading, error] = useCollectionData(q);
-
-    const priorityQ = query(collection(db, collectionName), orderBy("priority", "desc"));
-    const [priorityOrderedTasks, priorityLoading, priorityError] = useCollectionData(priorityQ);
+    const sortedQ = query(collection(db, collectionName), orderBy(orderType[0], orderType[1]));
+    console.log("order by", orderType[0]);
+    const [tasks, loading, error] = useCollectionData(sortedQ);
 
     function handleEditItem(itemId, value, field) {
 
@@ -59,7 +62,7 @@ function App() {
     function handleAddItem(key, value) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const newItem = {id: newId, value: value, completed: false, priority: priorityValue};
+            const newItem = {id: newId, value: value, completed: false, priority: priorityValue, time: serverTimestamp()};
             setDoc(doc(db, collectionName, newId), newItem);
         }
     }
@@ -108,17 +111,18 @@ function App() {
         return "there's been an error"
     }
 
-    if (priorityLoading) {
-        return <div className="load">"loading..."</div>;
-    }
-    if (priorityError) {
-        return "there's been an error"
-    }
+    function handleOrderBy(ordering) {
+        if (ordering === "priority") {
+            setOrderType(priorityOrder);
+        }
+        else if (ordering === "name") {
+            setOrderType(nameOrder)
+        }
+        else {
+            setOrderType(timeOrder)
+        }
 
-    function handleOrderByPriority() {
-        setOrderByPriority(!orderByPriority);
     }
-
 
     function getListItemData(listItemData) {
         setListItemData(listItemData);
@@ -130,14 +134,14 @@ function App() {
             <h1>Tasks</h1>
         </div>
 
-        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks && orderByPriority ? priorityOrderedTasks : tasks}
+        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
                    onSelectAll={handleSelectAll}
                    onDeselectAll={handleDeselectAll}
                    onCompletedToggle={handleToggleCompleted}
                    onChangeCompletedItems={handleChangeCompletedItems}
                    onToggleEditItem={handleEditPopUp}
                    onAddItem={handleAddItem}
-                   onOrderByPriority={handleOrderByPriority}
+                   onOrderBy={handleOrderBy}
                    onGetListItemData={getListItemData}
                    priority={priorityValue}
         />
