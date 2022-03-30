@@ -5,7 +5,7 @@ function ListItem(props) {
 
     function handleOnToggleEditItem() {
         props.onToggleEditItem()
-        props.onGetListItemData(listItem.id.concat(" ".concat(listItem.value)));
+        props.onGetListItemData(listItem.id + " " + listItem.value + " " + listItem.priority);
 
     }
 

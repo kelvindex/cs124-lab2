@@ -46,11 +46,10 @@ function App() {
 
     function handleEditItem(itemId, value, field) {
 
-            setDoc(doc(db, collectionName, itemId),
-                {[field]: value}, {merge: true});
+        setDoc(doc(db, collectionName, itemId),
+            {[field]: value}, {merge: true});
 
-            handleEditPopUp();
-
+        handleEditPopUp();
     }
 
     function handleEditPopUp() {
