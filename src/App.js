@@ -52,7 +52,7 @@ function App() {
         setDoc(doc(db, collectionName, itemId),
             {[field]: value}, {merge: true});
 
-        handleEditPopUp();
+        // handleEditPopUp();
     }
 
     function handleEditPopUp() {
