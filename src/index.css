@@ -170,3 +170,47 @@ input[type=checkbox]:focus {
 .alert-cancel {
   background-color: #86C232;
 }
+
+.item-value {
+  width : 70%;
+  overflow-wrap: normal;
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+}
+
+.add-modal {
+  background-color: #222629;
+  border-radius: 5pt;
+  border-color: black;
+  border-style: solid;
+  margin: 0 auto;
+  top: 30pt;
+  height: 100pt;
+  width: 200pt;
+  padding: 1pt 15pt 80px;
+  position: relative;
+  text-align: center;
+
+}
+
+h4 {
+  vertical-align: top;
+}
+
+.add-button {
+  background-color: #86C232;
+}
+
+.order-priority {
+  background-color: #86C232;
+  margin-top: 8px;
+  margin-bottom: 5px;
+  padding: 3px
+}
+
+.edit-button {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}

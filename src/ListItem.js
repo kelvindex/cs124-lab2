@@ -1,20 +1,20 @@
+import { FaEdit } from "react-icons/fa";
+
 function ListItem(props) {
     const listItem = props.item;
 
+    function handleOnToggleEditItem() {
+        props.onToggleEditItem()
+        props.onGetListItemData(listItem.id + " " + listItem.value + " " + listItem.priority);
+
+    }
+
     return <li onDoubleClick={props.onEditItem}>
         <input type="checkbox"
-               onChange={() => props.onItemSelected(listItem)}
-               checked={props.isCompleted}/>
-        <input type="text" className="listItemValue" value={listItem.value} onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>
-            <label className="radio-inline">
-                <input type="radio" name={"optradio " + listItem.id} onChange={() => props.onEditItem(listItem.id, 1, "priority")} checked={listItem.priority===1}/>1
-            </label>
-            <label className="radio-inline">
-                <input type="radio" name={"optradio " + listItem.id} onChange={() => props.onEditItem(listItem.id, 2, "priority")} checked={listItem.priority===2}/>2
-            </label>
-            <label className="radio-inline">
-                <input type="radio" name={"optradio " + listItem.id} onChange={() => props.onEditItem(listItem.id, 3, "priority")} checked={listItem.priority===3}/>3
-            </label>
+               id={listItem.id}
+               onChange={() => props.onChangeCompletedItems(listItem)}
+               checked={listItem.completed}/> <label htmlFor={listItem.id} className={"item-value"}>{"!".repeat(props.priority)} {listItem.value}</label>
+    <button className="edit-button" onClick={handleOnToggleEditItem}><FaEdit color="#86C232"/></button>
     </li>
 
 }

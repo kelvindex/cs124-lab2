@@ -5,9 +5,12 @@ import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, query, collection, orderBy, setDoc, doc, deleteDoc } from "firebase/firestore";
-import {useCollectionData} from "react-firebase-hooks/firestore"; // useCollection
+import {initializeApp} from "firebase/app";
+import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
+import {useCollectionData} from "react-firebase-hooks/firestore";
+import {FaPlus} from "react-icons/fa";
+import AddPopUp from "./AddPopUp";
+import EditPopUp from "./EditPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,105 +24,141 @@ const firebaseConfig = {
     appId: "1:275550647862:web:d229d0a8cfca991d114a97"
 };
 
-
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionName = "taskList";
+const collectionName = "Tasks";
 
 function App() {
     const [completedToggle, setCompletedToggle] = useState(false);
-    const collectionRef = collection(db, collectionName)
-    const q = query(collectionRef);
-    let [tasks, loading, error] = useCollectionData(q);
-
-    // const tasksF = [useCollectionData(query(collection(db, collectionName), where("hidden","==","false")))];
-
-    // const filteredTasks = query(collectionRef, where("hidden","==","false"));
-    // const [tasksF, loadingF, errorF] = useCollectionData(filteredTasks);
-
-
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [addPopUp, setAddPopUp] = useState(false);
+    const [editPopUp, setEditPopUp] = useState(false);
+    const [priorityValue, setPriorityValue] = useState(0);
+    
+    const [listItemData, setListItemData] = useState("");
+    
+    const priorityOrder = ["priority", "desc"];
+    const nameOrder = ["value", "asc"];
+    const timeOrder = ["time", "asc"];
+    const [orderType, setOrderType] = useState(timeOrder);
 
-    function handleItemSelected(item) {
-        setDoc(doc(db, collectionName, item.id),
-            {completed: !item.completed}, {merge: true});
-    }
+    const sortedQ = query(collection(db, collectionName), orderBy(orderType[0], orderType[1]));
+    console.log("order by", orderType[0]);
+    const [tasks, loading, error] = useCollectionData(sortedQ);
 
     function handleEditItem(itemId, value, field) {
+
         setDoc(doc(db, collectionName, itemId),
             {[field]: value}, {merge: true});
+
+        handleEditPopUp();
+    }
+
+    function handleEditPopUp() {
+        setEditPopUp(!editPopUp)
     }
 
     function handleAddItem(key, value) {
         if (key === 'Enter') {
-            const currentDate = new Date();
-            const dateTime = "Last Sync: " + currentDate.getDate() + "/"
-                + (currentDate.getMonth()+1)  + "/"
-                + currentDate.getFullYear() + " @ "
-                + currentDate.getHours() + ":"
-                + currentDate.getMinutes() + ":"
-                + currentDate.getSeconds();
             const newId = generateUniqueID();
-            const newItem = {id: newId, value: value, completed: false, hidden: false, priority: 3, date: dateTime};
+            const newItem = {id: newId, value: value, completed: false, priority: priorityValue, time: serverTimestamp()};
             setDoc(doc(db, collectionName, newId), newItem);
         }
     }
 
     function handleDeleteCompleted() {
-        tasks.forEach(i => i.completed ? deleteDoc(doc(db, collectionName, i.id)) : i);
+        tasks.forEach(i => {
+            if (i.completed) deleteDoc(doc(db, collectionName, i.id))
+        });
         toggleModal(); // close pop up
     }
 
+    function handleAddPopUp() {
+        setAddPopUp(!addPopUp);
+    }
+
     function handleToggleCompleted() {
-        // tasks.forEach(i => i.completed ? setDoc(doc(db, completedCollectionName, i.id)) : i);
-        tasks.forEach(i => i.completed ? setDoc(doc(db, collectionName, i.id),
-            {hidden: !completedToggle}, {merge: true}) : i);
         setCompletedToggle(!completedToggle);
     }
 
-    function handleSelectAll() {
-        tasks.forEach(i => i.completed === false ? setDoc(doc(db, collectionName, i.id), {completed: true}) : i);
+    function handleChangeCompletedItems(item) {
+        updateDoc(doc(db, collectionName, item.id), {completed: !item.completed});
     }
-
-    function handleDeselectAll() {
-        tasks.forEach(i => i.completed === true ? setDoc(doc(db, collectionName, i.id), {completed: false}) : i);
-    }
-
-    function handleOrderItems(value) {
-        collectionRef.orderBy("value");
-    }
-
 
     function toggleModal() {
         setShowDeleteAlert(!showDeleteAlert);
     }
 
+    function handleSelectAll() {
+        tasks.forEach(i => i.completed === false ? updateDoc(doc(db, collectionName, i.id), {completed: true}) : i);
+    }
+
+    function handleDeselectAll() {
+        tasks.forEach(i => i.completed === true ? updateDoc(doc(db, collectionName, i.id), {completed: false}) : i);
+    }
+
+    function handleSetPriorityValue(priority) {
+        setPriorityValue(priority);
+    }
+
     if (loading) {
-        return "loading...";
+        return <div className="load">"loading..."</div>;
     }
 
     if (error) {
+        console.log(error);
         return "there's been an error"
     }
+
+    function handleOrderBy(ordering) {
+        if (ordering === "priority") {
+            setOrderType(priorityOrder);
+        }
+        else if (ordering === "name") {
+            setOrderType(nameOrder)
+        }
+        else {
+            setOrderType(timeOrder)
+        }
+
+    }
+
+    function getListItemData(listItemData) {
+        setListItemData(listItemData);
+        console.log("data: ", listItemData);
+    }
+
     return <>
         <div id="titleBar">
             <h1>Tasks</h1>
         </div>
 
-        <ListItems data={tasks.filter(i => i.hidden === false)}
-                   onCompletedToggle={handleToggleCompleted}
-                   onItemSelected={handleItemSelected}
+        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
                    onSelectAll={handleSelectAll}
                    onDeselectAll={handleDeselectAll}
-                   onEditItem={handleEditItem}
+                   onCompletedToggle={handleToggleCompleted}
+                   onChangeCompletedItems={handleChangeCompletedItems}
+                   onToggleEditItem={handleEditPopUp}
                    onAddItem={handleAddItem}
-                   onOrderItems={handleOrderItems}
-
+                   onOrderBy={handleOrderBy}
+                   onGetListItemData={getListItemData}
+                   priority={priorityValue}
         />
+
+        <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>
+        {addPopUp && <AddPopUp onAddItem={handleAddItem} onClose={handleAddPopUp} priority={priorityValue} onSetPriority={handleSetPriorityValue}>
+            <h4>New item</h4></AddPopUp>}
         <br/><br/>
-        {<button id="delete" onClick={toggleModal}>Delete completed items</button>}
+        {tasks.filter(i => i.completed).length !== 0 && !completedToggle &&
+            <button id="delete" onClick={toggleModal}>Delete completed items</button>}
+
+        {editPopUp && <EditPopUp onClose={handleEditPopUp}
+                                 onEditPriority={handleEditItem}
+                                 onFinishEdit={handleEditItem}
+                                 listItemData={listItemData}>
+            <h4>Edit item</h4></EditPopUp>}
+
         {showDeleteAlert && <DeleteCompletedAlert onClose={toggleModal} onDelete={handleDeleteCompleted}>
             <div>
                 Are you sure you want to delete all completed items?
