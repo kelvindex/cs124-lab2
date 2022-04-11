@@ -237,3 +237,30 @@ h4 {
   padding: 0;
   background-color: transparent;
 }
+
+.navbar {
+  opacity: .95;
+  display: block;
+  position: relative;
+  height: 64px;
+}
+
+.navbar .lists-menu {
+  padding-top: 10px;
+  background: #fff;
+  height: 100vh;
+  max-width: 300px;
+  transform: translate(-150%);
+  display: flex;
+  flex-direction: column;
+  margin-left: -40px;
+  padding-left: 50px;
+  transition: transform 0.5s ease-in-out;
+  box-shadow: 5px 0px 10px 0px #aaa;
+}
+
+.navbar .lists-menu li {
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+}

@@ -3,7 +3,7 @@ import ListItem from "./ListItem";
 function ListItems(props) {
 
     return <>
-        <span id="uncomplete">Hide completed tasks</span><input type="checkbox" onChange={props.onCompletedToggle}
+        <label htmlFor="completed-toggle" id="uncomplete">Hide completed tasks</label><input type="checkbox" id="completed-toggle" onChange={props.onCompletedToggle}
                                                                 className="toggle"/>
 
         <br/>

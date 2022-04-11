@@ -38,6 +38,7 @@ function App() {
     const [addPopUp, setAddPopUp] = useState(false);
     const [editPopUp, setEditPopUp] = useState(false);
     const [priorityValue, setPriorityValue] = useState(0);
+    const [addListPopUp, setAddListPopUp] = useState(false);
     
     const [listItemData, setListItemData] = useState("");
     
@@ -46,19 +47,18 @@ function App() {
     const timeOrder = ["time", "asc"];
     const [orderType, setOrderType] = useState(timeOrder);
 
-    const [addListPopUp, setAddListPopUp] = useState(false);
     const [showLists, setShowLists] = useState(false);
     const [currentListId, setCurrentListId] = useState(generateUniqueID());
+    const pathName = collectionName + "/" + currentListId + "/" + subCollectionName;
 
     const tasksListsQ = query(collection(db, collectionName));
-    const sortedQ = query(collection(db, subCollectionName), orderBy(orderType[0], orderType[1]));
-    console.log("order by", orderType[0]);
     const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
+
+    const sortedQ = query(collection(db, collectionName, currentListId, subCollectionName), orderBy(orderType[0], orderType[1]));
     const [tasks, loading, error] = useCollectionData(sortedQ);
 
     function handleEditItem(itemId, value, field) {
-
-        setDoc(doc(db, subCollectionName, itemId),
+        setDoc(doc(db, pathName, itemId),
             {[field]: value}, {merge: true});
 
         handleEditPopUp();
@@ -68,18 +68,22 @@ function App() {
         setEditPopUp(!editPopUp)
     }
 
+    function handleAddListPopUp() {
+        setAddListPopUp(!addListPopUp);
+    }
+
     function handleAddItem(key, value) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
             const newItem = {id: newId, value: value, completed: false, priority: priorityValue, time: serverTimestamp()};
-            setDoc(doc(db, subCollectionName, newId), newItem);
+            setDoc(doc(db, collectionName, currentListId, subCollectionName, newId), newItem);
         }
     }
 
-    function handleAddList(listId, listName) {
-        const pathName = collectionName + "/" + listId + "/" + subCollectionName;
+    function handleAddList(listName) {
         const newId = generateUniqueID();
-        const newList = {title: listName, tasks: []};
+        const pathName = collectionName + "/" + newId + "/" + subCollectionName;
+        const newList = {title: listName, tasks: [], id: newId};
         setDoc(doc(db, pathName , newId), newList);
 
         setCurrentListId(newId);
@@ -87,7 +91,7 @@ function App() {
 
     function handleDeleteCompleted() {
         tasks.forEach(i => {
-            if (i.completed) deleteDoc(doc(db, subCollectionName, i.id))
+            if (i.completed) deleteDoc(doc(db, pathName, i.id))
         });
         toggleModal(); // close pop up
     }
@@ -101,7 +105,7 @@ function App() {
     }
 
     function handleChangeCompletedItems(item) {
-        updateDoc(doc(db, subCollectionName, item.id), {completed: !item.completed});
+        updateDoc(doc(db, pathName, item.id), {completed: !item.completed});
     }
 
     function toggleModal() {
@@ -109,11 +113,11 @@ function App() {
     }
 
     function handleSelectAll() {
-        tasks.forEach(i => i.completed === false ? updateDoc(doc(db, subCollectionName, i.id), {completed: true}) : i);
+        tasks.forEach(i => i.completed === false ? updateDoc(doc(db, pathName, i.id), {completed: true}) : i);
     }
 
     function handleDeselectAll() {
-        tasks.forEach(i => i.completed === true ? updateDoc(doc(db, subCollectionName, i.id), {completed: false}) : i);
+        tasks.forEach(i => i.completed === true ? updateDoc(doc(db, pathName, i.id), {completed: false}) : i);
     }
 
     function handleSetPriorityValue(priority) {
@@ -151,22 +155,26 @@ function App() {
         setShowLists(!showLists);
     }
 
-    function handleSetCurrentListId() {
-
+    function handleSetCurrentListId(listId) {
+        setCurrentListId(listId);
     }
 
     return <>
-        <div id="titleBar">
-            {<button onClick={handleShowLists}><FaBars/></button>} <h1>Tasks</h1>
+        <div className="navbar">
+            <div id="titleBar">
+                <h1>Tasks</h1>
+            </div>
+            <input id="menu-toggle" type="checkbox" onChange={handleShowLists}/> <label htmlFor="menu-toggle"><FaBars/></label>
+            {showLists && <TaskLists lists={tasksLists}
+                                     loading={listsLoading}
+                                     error={listsError}
+                                     currentListId={currentListId}
+                                     onAddNewList={handleAddList}
+                                     onAddListPopUp={handleAddListPopUp}
+                                     addListPopUp={addListPopUp}
+                                     onChangeCurrentList={handleSetCurrentListId}/>
+            }
         </div>
-
-        {showLists && <TaskLists lists={tasksLists}
-                                 loading={listsLoading}
-                                 error={listsError}
-                                 currentListId={currentListId}
-                                 onAddNewList={handleAddList}
-                                 onChangeCurrentList={handleSetCurrentListId}/>
-        }
 
         <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
                    onSelectAll={handleSelectAll}
@@ -181,7 +189,10 @@ function App() {
         />
 
         <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>
-        {addPopUp && <AddPopUp onAddItem={handleAddItem} onClose={handleAddPopUp} priority={priorityValue} onSetPriority={handleSetPriorityValue}>
+        {addPopUp && <AddPopUp onAddItem={handleAddItem}
+                               onClose={handleAddPopUp}
+                               priority={priorityValue}
+                               onSetPriority={handleSetPriorityValue}>
             <h4>New item</h4></AddPopUp>}
         <br/><br/>
         {tasks.filter(i => i.completed).length !== 0 && !completedToggle &&
