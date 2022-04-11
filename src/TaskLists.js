@@ -22,6 +22,7 @@ function TaskLists(props) {
             <li key={l.id}>
                 {console.log(l.title)}
                 <input type="radio"
+                       checked={props.currentListId === l.id}
                        id={l.id}
                        name="taskList"
                        value={l.id}
