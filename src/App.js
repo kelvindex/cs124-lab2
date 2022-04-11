@@ -7,13 +7,12 @@ import {FaBars} from "react-icons/fa";
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
+import {getFirestore, query, collection, setDoc, getDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FaPlus} from "react-icons/fa";
 import AddPopUp from "./AddPopUp";
 import EditPopUp from "./EditPopUp";
 import TaskLists from "./TaskLists";
-import AddListPopUp from "./AddListPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -165,7 +164,7 @@ function App() {
         <div className="top-nav">
             <button className="toggle-side-menu" onClick={handleShowLists}><FaBars/></button>
             <div id="titleBar">
-                <h1>Tasks</h1>
+                <h1>{tasksLists.find(l => l.id === currentListId).title}</h1>
             </div>
         </div>
 
