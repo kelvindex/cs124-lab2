@@ -9,7 +9,7 @@ function ListItem(props) {
 
     }
 
-    return <li onDoubleClick={props.onEditItem}>
+    return <li>
         <input type="checkbox"
                id={listItem.id}
                onChange={() => props.onChangeCompletedItems(listItem)}

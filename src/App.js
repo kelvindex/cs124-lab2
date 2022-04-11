@@ -13,6 +13,7 @@ import {FaPlus} from "react-icons/fa";
 import AddPopUp from "./AddPopUp";
 import EditPopUp from "./EditPopUp";
 import TaskLists from "./TaskLists";
+import AddListPopUp from "./AddListPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -48,8 +49,7 @@ function App() {
     const [orderType, setOrderType] = useState(timeOrder);
 
     const [showLists, setShowLists] = useState(false);
-    const [currentListId, setCurrentListId] = useState("v2-1649663450847-8166434544735");
-    const pathName = collectionName + "/" + currentListId + "/" + subCollectionName;
+    const [currentListId, setCurrentListId] = useState("v2-1649666295177-6148108716387");
 
     const tasksListsQ = query(collection(db, collectionName));
     const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
@@ -59,7 +59,7 @@ function App() {
     const [tasks, loading, error] = useCollectionData(sortedQ);
 
     function handleEditItem(itemId, value, field) {
-        setDoc(doc(db, pathName, itemId),
+        setDoc(doc(db, collectionName, currentListId, subCollectionName, itemId),
             {[field]: value}, {merge: true});
 
         handleEditPopUp();
@@ -84,9 +84,8 @@ function App() {
     function handleAddList(key, listName) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const pathName = collectionName + "/" + newId + "/" + subCollectionName;
             const newList = {title: listName, tasks: [], id: newId};
-            setDoc(doc(db, pathName, newId), newList);
+            setDoc(doc(db, collectionName, newId), newList);
             setCurrentListId(newId);
             handleAddListPopUp();
         }
@@ -94,7 +93,7 @@ function App() {
 
     function handleDeleteCompleted() {
         tasks.forEach(i => {
-            if (i.completed) deleteDoc(doc(db, pathName, i.id))
+            if (i.completed) deleteDoc(doc(db, collectionName, currentListId, subCollectionName, i.id))
         });
         toggleModal(); // close pop up
     }
@@ -108,7 +107,7 @@ function App() {
     }
 
     function handleChangeCompletedItems(item) {
-        updateDoc(doc(db, pathName, item.id), {completed: !item.completed});
+        updateDoc(doc(db, collectionName, currentListId, subCollectionName, item.id), {completed: !item.completed});
     }
 
     function toggleModal() {
@@ -116,11 +115,11 @@ function App() {
     }
 
     function handleSelectAll() {
-        tasks.forEach(i => i.completed === false ? updateDoc(doc(db, pathName, i.id), {completed: true}) : i);
+        tasks.forEach(i => i.completed === false ? updateDoc(doc(db, collectionName, currentListId, subCollectionName, i.id), {completed: true}) : i);
     }
 
     function handleDeselectAll() {
-        tasks.forEach(i => i.completed === true ? updateDoc(doc(db, pathName, i.id), {completed: false}) : i);
+        tasks.forEach(i => i.completed === true ? updateDoc(doc(db, collectionName, currentListId, subCollectionName, i.id), {completed: false}) : i);
     }
 
     function handleSetPriorityValue(priority) {
