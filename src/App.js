@@ -159,6 +159,7 @@ function App() {
 
     function handleSetCurrentListId(listId) {
         setCurrentListId(listId);
+        handleShowLists();
     }
 
     return <>
