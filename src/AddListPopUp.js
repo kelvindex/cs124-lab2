@@ -1,5 +1,5 @@
 function AddListPopUp(props) {
-    return <div className="backdrop">
+    return <div className="backdrop" onClick={props.onClose}>
         <div className="add-modal">
             {props.children}
             <br/>

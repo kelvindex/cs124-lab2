@@ -14,14 +14,14 @@ function TaskLists(props) {
     }
 
     return <div className="navbar">
-        <button className="close-sidebar-button"><FaWindowClose onClick={props.onCloseSideBar}/></button>
+        <button className="close-sidebar-button" onClick={props.onCloseSideBar} aria-label={"Close Task List"}><FaWindowClose/></button>
         <h3>Task Lists</h3>
         <button className="add-list-button" onClick={props.onAddListPopUp}><FaPlus/> New list</button>
         <ul className="lists-menu">
             {props.lists.map(l =>
             <li key={l.id}>
                 {console.log(l.title)}
-                <input type="radio"
+                <button class="taskListButton"
                        checked={props.currentListId === l.id}
                        id={l.id}
                        name="taskList"

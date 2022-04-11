@@ -14,7 +14,7 @@ function ListItem(props) {
                id={listItem.id}
                onChange={() => props.onChangeCompletedItems(listItem)}
                checked={listItem.completed}/> <label htmlFor={listItem.id} className={"item-value"}>{"!".repeat(props.priority)} {listItem.value}</label>
-    <button className="edit-button" onClick={handleOnToggleEditItem}><FaEdit color="#86C232"/></button>
+    <button className="edit-button" onClick={handleOnToggleEditItem}><FaEdit color="#86C232" aria-label={"Edit " + (listItem.value ? listItem.value : "value") + " Item"}/></button>
     </li>
 
 }

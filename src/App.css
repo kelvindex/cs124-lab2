@@ -13,6 +13,16 @@
   }
 }
 
+.taskListButton {
+  opacity: 0;
+  display: flex;
+  size: 0px;
+}
+
+#sort {
+  margin-left: 40px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
