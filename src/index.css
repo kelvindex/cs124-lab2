@@ -5,13 +5,20 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
-h1 {
+.top-nav {
+  background-color: #333;
+  color: #86C232;
   padding-left: 1.2em;
   padding-top: 1em;
-  padding-bottom: .5em;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  padding-top: 20px;
+  padding-bottom: 0px;
+  margin-left: 18px;
   font-family: "Arial", sans-serif;
-  color: #86C232;
-  background-color: #333;
   margin-top: 0;
   overflow: hidden;
 }
@@ -202,11 +209,34 @@ h4 {
   background-color: #86C232;
 }
 
+.priority-buttons {
+  display: block;
+  justify-content: center;
+  margin-left: 33px;
+}
+
 .order-priority {
-  background-color: #86C232;
+  background-color: #222629;
+  border-color: #86C232;
+  border-style: solid;
+  border-radius: 20px;
+  border-width: 1pt;
+  color: #86C232;
   margin-top: 8px;
   margin-bottom: 5px;
-  padding: 3px
+  margin-left: 7px;
+  font-size: 11px;
+  padding: 4px;
+}
+
+.order-priority:hover {
+  background-color: #86C232;
+  color: white;
+}
+
+.order-priority:active {
+  background-color: #86C232;
+  color: white;
 }
 
 .edit-button {
@@ -214,3 +244,99 @@ h4 {
   padding: 0;
   background-color: transparent;
 }
+
+.navbar {
+  opacity: .97;
+  background-color: #86C232;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 225px;
+  height: 100%;
+  padding: 20px 0;
+  z-index: 3;
+  transition: all 0.5s ease;
+}
+
+.navbar h3 {
+  margin-left: 25px;
+}
+
+.navbar .lists-menu {
+  padding-top: 10px;
+  height: 100vh;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  margin-left: -40px;
+  padding-left: 50px;
+  transition: transform 0.5s ease-in-out;
+}
+
+.navbar .lists-menu li {
+  display: block;
+  margin-bottom: 0px;
+  border-bottom: 1px solid white;
+  font-size: 16px;
+  color: white;
+  position: relative;
+}
+
+.navbar .lists-menu li label {
+  display: block;
+  padding: 13px 20px;
+  margin-bottom: 0px;
+  width: 175px;
+}
+
+.navbar .lists-menu li:hover {
+  display: block;
+  border-bottom: 1px solid white;
+  font-size: 16px;
+  color: white;
+  background-color: #222629;
+  position: relative;
+}
+
+.navbar .lists-menu input[type="radio"]:checked+label {
+  display: block;
+  padding: 13px 20px;
+  margin-bottom: 0px;
+  border-bottom: 1px solid white;
+  font-size: 16px;
+  color: white;
+  background-color: #222629;
+  position: relative;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+
+.close-sidebar-button {
+  margin-left: 20px;
+  font-size: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+.add-list-button {
+  margin-left: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+.toggle-side-menu {
+  margin-left: 6px;
+  font-size: 20px;
+  border: none;
+  padding: 10px;
+  background-color: transparent;
+}
+
+.toggle-side-menu:active {
+  background-color: #86C232;
+  border-radius: 0;
+}
+
