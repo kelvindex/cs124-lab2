@@ -5,7 +5,7 @@ function AddListPopUp(props) {
             <br/>
             <label id="addItem">
                 <input type="text" className="inputItem" placeholder="New list title"
-                       onKeyPress={(e) => {props.onAddList(e.key, e.target.value); if (e.key === 'Enter') {e.target.value = ""}}}/>
+                       onKeyPress={(e) => {props.onAddNewList(e.key, e.target.value); if (e.key === 'Enter') {e.target.value = ""}}}/>
             </label>
             <br/> <br/>
             <div className="add-popup-buttons">

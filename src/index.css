@@ -5,13 +5,20 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
-h1 {
+.top-nav {
+  background-color: #333;
+  color: #86C232;
   padding-left: 1.2em;
   padding-top: 1em;
-  padding-bottom: .5em;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  padding-top: 20px;
+  padding-bottom: 0px;
+  margin-left: 18px;
   font-family: "Arial", sans-serif;
-  color: #86C232;
-  background-color: #333;
   margin-top: 0;
   overflow: hidden;
 }
@@ -239,10 +246,20 @@ h4 {
 }
 
 .navbar {
-  opacity: .95;
-  display: block;
-  position: relative;
-  height: 64px;
+  opacity: .97;
+  background-color: #86C232;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 225px;
+  height: 100%;
+  padding: 20px 0;
+  z-index: 3;
+  transition: all 0.5s ease;
+}
+
+.navbar h3 {
+  margin-left: 25px;
 }
 
 .navbar .lists-menu {
@@ -260,7 +277,29 @@ h4 {
 }
 
 .navbar .lists-menu li {
-  margin-bottom: 1.5rem;
-  font-size: 1.3rem;
-  font-weight: 500;
+  display: block;
+  padding: 13px 30px;
+  border-bottom: 1px solid #10558d;
+  font-size: 16px;
+  position: relative;
+}
+
+.close-sidebar-button {
+  margin-left: 20px;
+  font-size: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+.toggle-side-menu {
+  margin-left: 6px;
+  font-size: 20px;
+  border: none;
+  padding: 10px;
+  background-color: transparent;
+}
+
+.toggle-side-menu:active {
+  background-color: #86C232;
+  border-radius: 0;
 }

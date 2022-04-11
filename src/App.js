@@ -48,11 +48,12 @@ function App() {
     const [orderType, setOrderType] = useState(timeOrder);
 
     const [showLists, setShowLists] = useState(false);
-    const [currentListId, setCurrentListId] = useState(generateUniqueID());
+    const [currentListId, setCurrentListId] = useState("v2-1649663450847-8166434544735");
     const pathName = collectionName + "/" + currentListId + "/" + subCollectionName;
 
     const tasksListsQ = query(collection(db, collectionName));
     const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
+    console.log(tasksLists);
 
     const sortedQ = query(collection(db, collectionName, currentListId, subCollectionName), orderBy(orderType[0], orderType[1]));
     const [tasks, loading, error] = useCollectionData(sortedQ);
@@ -80,13 +81,15 @@ function App() {
         }
     }
 
-    function handleAddList(listName) {
-        const newId = generateUniqueID();
-        const pathName = collectionName + "/" + newId + "/" + subCollectionName;
-        const newList = {title: listName, tasks: [], id: newId};
-        setDoc(doc(db, pathName , newId), newList);
-
-        setCurrentListId(newId);
+    function handleAddList(key, listName) {
+        if (key === 'Enter') {
+            const newId = generateUniqueID();
+            const pathName = collectionName + "/" + newId + "/" + subCollectionName;
+            const newList = {title: listName, tasks: [], id: newId};
+            setDoc(doc(db, pathName, newId), newList);
+            setCurrentListId(newId);
+            handleAddListPopUp();
+        }
     }
 
     function handleDeleteCompleted() {
@@ -160,21 +163,23 @@ function App() {
     }
 
     return <>
-        <div className="navbar">
+        <div className="top-nav">
+            <button className="toggle-side-menu" onClick={handleShowLists}><FaBars/></button>
             <div id="titleBar">
                 <h1>Tasks</h1>
             </div>
-            <input id="menu-toggle" type="checkbox" onChange={handleShowLists}/> <label htmlFor="menu-toggle"><FaBars/></label>
-            {showLists && <TaskLists lists={tasksLists}
-                                     loading={listsLoading}
-                                     error={listsError}
-                                     currentListId={currentListId}
-                                     onAddNewList={handleAddList}
-                                     onAddListPopUp={handleAddListPopUp}
-                                     addListPopUp={addListPopUp}
-                                     onChangeCurrentList={handleSetCurrentListId}/>
-            }
         </div>
+
+        {showLists && <TaskLists lists={tasksLists}
+                                 onCloseSideBar={handleShowLists}
+                                 loading={listsLoading}
+                                 error={listsError}
+                                 currentListId={currentListId}
+                                 onAddNewList={handleAddList}
+                                 onAddListPopUp={handleAddListPopUp}
+                                 addListPopUp={addListPopUp}
+                                 onChangeCurrentList={handleSetCurrentListId}/>
+        }
 
         <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
                    onSelectAll={handleSelectAll}

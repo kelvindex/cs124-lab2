@@ -1,5 +1,4 @@
-import {FaPlus} from "react-icons/fa";
-import {useState} from "react";
+import {FaPlus, FaWindowClose} from "react-icons/fa";
 import AddListPopUp from "./AddListPopUp";
 
 
@@ -14,18 +13,20 @@ function TaskLists(props) {
         return "there's been an error"
     }
 
-    return <>
+    return <div className="navbar">
+        <button className="close-sidebar-button"><FaWindowClose onClick={props.onCloseSideBar}/></button>
+        <h3>Task Lists</h3>
         <ul className="lists-menu">
             {props.lists.map(l =>
             <li>
                 <input type={"radio"} id={l.id} onClick={props.onChangeCurrentList(l.id)}/> <label htmlFor={l.id}>{l.title}</label>
             </li>)}
-
         </ul>
         <button className="add-button" onClick={props.onAddListPopUp}><FaPlus/> New list</button>
+
         {props.addListPopUp && <AddListPopUp onAddNewList={props.onAddNewList} onClose={props.onAddListPopUp}>
             <h4>New List</h4></AddListPopUp>}
-    </>
+    </div>
 }
 
 
