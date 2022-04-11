@@ -5,12 +5,12 @@ function ListItems(props) {
     return <>
         <label htmlFor="completed-toggle" id="uncomplete">Hide completed tasks</label><input type="checkbox" id="completed-toggle" onChange={props.onCompletedToggle}
                                                                 className="toggle"/>
-            <label> Sort By: </label>
-            <select name="order" id="order" onChange={props.onOrderItems}>
-                <option value="date">date</option>
-                <option value="value">name</option>
-                <option value="priority">priority</option>
-            </select>
+            {/*<label> Sort By: </label>*/}
+            {/*<select name="order" id="order" onChange={props.onOrderItems}>*/}
+            {/*    <option value="date">date</option>*/}
+            {/*    <option value="value">name</option>*/}
+            {/*    <option value="priority">priority</option>*/}
+            {/*</select>*/}
 
         <br/>
         <div className="priority-buttons">

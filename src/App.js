@@ -61,8 +61,8 @@ function App() {
     function handleEditItem(itemId, value, field) {
         setDoc(doc(db, collectionName, currentListId, subCollectionName, itemId),
             {[field]: value}, {merge: true});
+        // handleEditPopUp();
 
-        handleEditPopUp();
     }
 
     function handleEditPopUp() {
@@ -163,7 +163,7 @@ function App() {
 
     return <>
         <div className="top-nav">
-            <button className="toggle-side-menu" onClick={handleShowLists}><FaBars/></button>
+            <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
             <div id="titleBar">
                 <h1>Tasks</h1>
             </div>
