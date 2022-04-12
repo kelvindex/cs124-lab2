@@ -1,5 +1,4 @@
-import {FaPlus, FaTrashAlt, FaWindowClose} from "react-icons/fa";
-import AddListPopUp from "./AddListPopUp";
+import {FaPlus, FaWindowClose} from "react-icons/fa";
 
 
 function TaskLists(props) {
@@ -21,7 +20,6 @@ function TaskLists(props) {
             {props.lists.map(l =>
             <li key={l.id}>
                 <button className="taskListButton"
-                       checked={props.currentListId === l.id}
                        id={l.id}
                        name="taskList"
                        value={l.id}
