@@ -3,12 +3,22 @@ import ListItem from "./ListItem";
 function ListItems(props) {
 
     return <>
-        <span id="uncomplete">Hide completed tasks</span><input type="checkbox" onChange={props.onCompletedToggle}
+        <label htmlFor="completed-toggle" id="uncomplete">Hide completed </label><input type="checkbox" id="completed-toggle" onChange={props.onCompletedToggle}
                                                                 className="toggle"/>
+            {/*<label> Sort By: </label>*/}
+            {/*<select name="order" id="order" onChange={props.onOrderItems}>*/}
+            {/*    <option value="date">date</option>*/}
+            {/*    <option value="value">name</option>*/}
+            {/*    <option value="priority">priority</option>*/}
+            {/*</select>*/}
 
         <br/>
-        <button className="order-priority" onClick={props.onOrderByPriority}>Order by priority</button>
-        <ul>
+        <div className="priority-buttons">
+            <button className="order-priority" onClick={() => props.onOrderBy("priority")}>Order by priority</button>
+            <button className="order-priority" onClick={() => props.onOrderBy("name")}>Order by name</button>
+            <button className="order-priority" onClick={() => props.onOrderBy("time")}>Order by time</button>
+        </div>
+        <ul className="list-items">
             {props.data.map(i =>
                 <ListItem item={i}
                           key={i.id}

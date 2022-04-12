@@ -2,24 +2,33 @@ body {
   background-color: #222629;
   color: white;
   margin: 0;
+  font-size: 14pt;
   font-family: "Roboto", sans-serif;
 }
 
-h1 {
+.top-nav {
+  background-color: #333;
+  color: #86C232;
   padding-left: 1.2em;
   padding-top: 1em;
-  padding-bottom: .5em;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  padding-top: 20px;
+  padding-bottom: 0px;
+  margin-left: 18px;
   font-family: "Arial", sans-serif;
-  color: #86C232;
-  background-color: #333;
   margin-top: 0;
+  font-size: 24pt;
   overflow: hidden;
 }
 
 ul {
   list-style: none;
   font-family: "Roboto", sans-serif;
-  font-size: 14px;
+  font-size: 14pt;
 }
 
 ul li {
@@ -27,7 +36,7 @@ ul li {
 }
 
 .fa-edit {
-  margin-left: 8px;
+  margin-left: 1em;
   font-size: 10px;
   vertical-align: middle;
 }
@@ -40,10 +49,11 @@ ul li {
 }
 
 button {
-  margin-left: 3em;
+  margin-left: 2.2em;
   background-color: darkred;
   box-shadow: black;
   font-family: "Roboto", sans-serif;
+  font-size: 14pt;
   color: white;
   border: none;
   border-radius: 6px;
@@ -52,8 +62,8 @@ button {
 }
 
 #uncomplete {
-  margin: 3em 1em 3em 3.1em;
-  font-size: 14px;
+  margin: 3em 1em 3em 2.2em;
+  font-size: 14pt;
 }
 .fa-info-circle {
   color: #86C232;
@@ -124,6 +134,9 @@ input[type=checkbox]:focus {
   box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
   transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
 }
+.toggle:focus {
+  box-shadow: 0px 0px 10px white;
+}
 
 .toggle:checked {
   border-color: #86C232;
@@ -138,24 +151,10 @@ input[type=checkbox]:focus {
   left: 0;
   bottom: 300pt;
   right: 300pt;
-  width: 360px;
-  height: 640px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 4;
   background-color: rgba(0, 0, 0, .8);
-}
-
-.modal {
-  background-color: #222629;
-  border-radius: 5pt;
-  border-color: black;
-  border-style: solid;
-  margin: 0 auto;
-  top: 50pt;
-  height: 100pt;
-  width: 200pt;
-  padding: 10pt;
-  position: relative;
-  text-align: center;
-  justify-content: center;
 }
 
 .alert-buttons {
@@ -179,15 +178,15 @@ input[type=checkbox]:focus {
   white-space: normal;
 }
 
-.add-modal {
+.modal {
   background-color: #222629;
   border-radius: 5pt;
   border-color: black;
   border-style: solid;
   margin: 0 auto;
   top: 30pt;
-  height: 100pt;
-  width: 200pt;
+  height: 10em;
+  width: 15em;
   padding: 1pt 15pt 80px;
   position: relative;
   text-align: center;
@@ -202,15 +201,143 @@ h4 {
   background-color: #86C232;
 }
 
+.priority-buttons {
+  display: block;
+  justify-content: center;
+  margin-left: 33px;
+}
+
 .order-priority {
-  background-color: #86C232;
+  background-color: #222629;
+  border-color: #86C232;
+  border-style: solid;
+  border-radius: 20px;
+  border-width: 1pt;
+  color: #86C232;
   margin-top: 8px;
   margin-bottom: 5px;
-  padding: 3px
+  margin-left: 7px;
+  font-size: 12pt;
+  padding: 4px;
+}
+
+.order-priority:hover {
+  background-color: #86C232;
+  color: white;
+}
+
+.order-priority:active {
+  background-color: #86C232;
+  color: white;
 }
 
 .edit-button {
   border: none;
   padding: 0;
   background-color: transparent;
+}
+
+.navbar {
+  opacity: .97;
+  background-color: #86C232;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 225px;
+  height: 100%;
+  padding: 20px 0;
+  z-index: 3;
+  transition: all 0.5s ease;
+}
+
+.navbar h3 {
+  margin-left: 25px;
+}
+
+.navbar .lists-menu {
+  padding-top: 10px;
+  height: 100vh;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  margin-left: -40px;
+  padding-left: 50px;
+  transition: transform 0.5s ease-in-out;
+}
+
+/*.navbar .lists-menu:focus {*/
+/*  box-shadow: 0 0px 2px white;*/
+/*}*/
+
+.navbar .lists-menu li {
+  display: block;
+  margin-bottom: 0px;
+  border-bottom: 1px solid white;
+  font-size: 16px;
+  color: white;
+  position: relative;
+}
+
+.navbar .lists-menu li label {
+  display: block;
+  padding: 13px 20px;
+  margin-bottom: 0px;
+  width: 175px;
+}
+
+.navbar .lists-menu li:hover {
+  display: block;
+  border-bottom: 1px solid white;
+  font-size: 16px;
+  color: white;
+  background-color: #222629;
+  position: relative;
+}
+
+.navbar .lists-menu input[type="radio"]:checked+label {
+  display: block;
+  padding: 13px 20px;
+  margin-bottom: 0px;
+  border-bottom: 1px solid white;
+  font-size: 16px;
+  color: white;
+  background-color: #222629;
+  position: relative;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+
+.close-sidebar-button {
+  margin-left: 20px;
+  font-size: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+.add-list-button {
+  margin-left: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+.toggle-side-menu {
+  margin-left: 6px;
+  font-size: 20px;
+  border: none;
+  padding: 10px;
+  background-color: transparent;
+}
+
+.toggle-side-menu:active {
+  background-color: #86C232;
+  border-radius: 0;
+}
+
+.taskListButton {
+  opacity: 0;
+  display: flex;
+  size: 0px;
 }

@@ -82,3 +82,16 @@ Some key features include:
 completely avaiable**
 
 ![](toggle_hide_complete.png)
+
+**After Lab 4**
+The app now has a side panel and icons for editing
+![](side-panel.png)
+![](new-list.png)
+
+The app now also has proper accessibility options, with keyboard only and voice over usage.
+
+Video showcasing accessibility options: https://www.youtube.com/watch?v=41dpJpfLSW0
+
+(The keys used are only tab to move through items, space to select, enter to add items, and arrow keys to move through drop-down menus.)
+
+As another note, while this pull request was made after 11pm, the lab was completed before then. We encountered many more issues with recording and uploading the video than expected, leading to this delayed submission.
