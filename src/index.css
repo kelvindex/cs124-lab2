@@ -153,7 +153,7 @@ input[type=checkbox]:focus {
   right: 300pt;
   width: 100vw;
   height: 100vh;
-  z-index: 2;
+  z-index: 4;
   background-color: rgba(0, 0, 0, .8);
 }
 
@@ -265,9 +265,9 @@ h4 {
   transition: transform 0.5s ease-in-out;
 }
 
-.navbar .lists-menu:focus {
-  box-shadow: 0 0px 2px white;
-}
+/*.navbar .lists-menu:focus {*/
+/*  box-shadow: 0 0px 2px white;*/
+/*}*/
 
 .navbar .lists-menu li {
   display: block;
@@ -334,4 +334,10 @@ input[type="radio"] {
 .toggle-side-menu:active {
   background-color: #86C232;
   border-radius: 0;
+}
+
+.taskListButton {
+  opacity: 0;
+  display: flex;
+  size: 0px;
 }

@@ -14,6 +14,7 @@ import AddPopUp from "./AddPopUp";
 import EditPopUp from "./EditPopUp";
 import TaskLists from "./TaskLists";
 import DeleteListPopUp from "./DeleteListPopUp";
+import AddListPopUp from "./AddListPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -200,6 +201,7 @@ function App() {
                                  onChangeCurrentList={handleSetCurrentListId}/>
         }
         {currentListId === "" && <button className="add-list-button" onClick={handleAddListPopUp}><FaPlus/> New list</button>}
+        {addListPopUp && <AddListPopUp onAddNewList={handleAddList} onClose={handleAddListPopUp}> <h4>New List</h4></AddListPopUp>}
         {deleteListPopUp && <DeleteListPopUp onDelete={handleDeleteList} onClose={handleDeleteListPopUp}>Delete this list?</DeleteListPopUp>}
 
         {currentListId !== "" && <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
