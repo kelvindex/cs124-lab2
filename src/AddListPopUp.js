@@ -1,6 +1,6 @@
 function AddListPopUp(props) {
     return <div className="backdrop" onClick={props.onClose}>
-        <div className="add-modal">
+        <div className="modal">
             {props.children}
             <br/>
             <label id="addItem">

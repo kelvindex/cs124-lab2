@@ -5,7 +5,7 @@ function EditPopUp(props) {
     const priority = data[2];
 
     return <div className="backdrop">
-        <div className="add-modal">
+        <div className="modal">
             {props.children}
             <br/>
             <label id="addItem">

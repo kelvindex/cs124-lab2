@@ -1,7 +1,7 @@
 function AddPopUp(props) {
 
     return <div className="backdrop">
-        <div className="add-modal">
+        <div className="modal">
             {props.children}
             <br/>
             <label id="addItem">

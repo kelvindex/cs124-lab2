@@ -3,16 +3,17 @@ import {useState} from "react";
 import DeleteCompletedAlert from "./DeleteCompletedAlert";
 import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
-import {FaBars} from "react-icons/fa";
+import {FaBars, FaTrashAlt} from "react-icons/fa";
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {getFirestore, query, collection, setDoc, getDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
+import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FaPlus} from "react-icons/fa";
 import AddPopUp from "./AddPopUp";
 import EditPopUp from "./EditPopUp";
 import TaskLists from "./TaskLists";
+import DeleteListPopUp from "./DeleteListPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -30,7 +31,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const collectionName = "TaskLists"
-const subCollectionName = "tasks";
+// const subCollectionName = "tasks";
 
 function App() {
     const [completedToggle, setCompletedToggle] = useState(false);
@@ -39,6 +40,7 @@ function App() {
     const [editPopUp, setEditPopUp] = useState(false);
     const [priorityValue, setPriorityValue] = useState(0);
     const [addListPopUp, setAddListPopUp] = useState(false);
+    const [deleteListPopUp, setDeleteListPopUp] = useState(false);
     
     const [listItemData, setListItemData] = useState("");
     
@@ -48,7 +50,9 @@ function App() {
     const [orderType, setOrderType] = useState(timeOrder);
 
     const [showLists, setShowLists] = useState(false);
-    const [currentListId, setCurrentListId] = useState("v2-1649666295177-6148108716387");
+    const [currentListId, setCurrentListId] = useState("");
+    const [subCollectionName, setSubCollectionName] = useState("");
+    const [currentListTitle, setCurrentListTitle] = useState("Tasks");
 
     const tasksListsQ = query(collection(db, collectionName));
     const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
@@ -85,6 +89,8 @@ function App() {
             const newList = {title: listName, tasks: [], id: newId};
             setDoc(doc(db, collectionName, newId), newList);
             setCurrentListId(newId);
+            setCurrentListTitle(listName);
+            setSubCollectionName("tasks");
             handleAddListPopUp();
         }
     }
@@ -155,16 +161,30 @@ function App() {
         setShowLists(!showLists);
     }
 
-    function handleSetCurrentListId(listId) {
+    function handleSetCurrentListId(listId, listName) {
         setCurrentListId(listId);
+        setSubCollectionName("tasks");
+        setCurrentListTitle(listName);
+    }
+
+    function handleDeleteListPopUp() {
+        setDeleteListPopUp(!deleteListPopUp);
+    }
+
+    function handleDeleteList() {
+        deleteDoc(doc(db, collectionName, currentListId));
+        setCurrentListId("");
+        setSubCollectionName("");
+        handleDeleteListPopUp();
     }
 
     return <>
         <div className="top-nav">
             <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
             <div id="titleBar">
-                <h1>Tasks</h1>
-                {/*{tasksLists.find(l => l.id === currentListId).title}*/}
+                <h1>{currentListId !== "" ? currentListTitle : "Create list"}
+                    {currentListId !== "" ? <button className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
+                        null }</h1>
             </div>
         </div>
 
@@ -176,10 +196,13 @@ function App() {
                                  onAddNewList={handleAddList}
                                  onAddListPopUp={handleAddListPopUp}
                                  addListPopUp={addListPopUp}
+                                 onDeleteListPopUp={handleDeleteListPopUp}
                                  onChangeCurrentList={handleSetCurrentListId}/>
         }
+        {currentListId === "" && <button className="add-list-button" onClick={handleAddListPopUp}><FaPlus/> New list</button>}
+        {deleteListPopUp && <DeleteListPopUp onDelete={handleDeleteList} onClose={handleDeleteListPopUp}>Delete this list?</DeleteListPopUp>}
 
-        <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
+        {currentListId !== "" && <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
                    onSelectAll={handleSelectAll}
                    onDeselectAll={handleDeselectAll}
                    onCompletedToggle={handleToggleCompleted}
@@ -189,9 +212,9 @@ function App() {
                    onOrderBy={handleOrderBy}
                    onGetListItemData={getListItemData}
                    priority={priorityValue}
-        />
+        />}
 
-        <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>
+        {currentListId !== "" && <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>}
         {addPopUp && <AddPopUp onAddItem={handleAddItem}
                                onClose={handleAddPopUp}
                                priority={priorityValue}

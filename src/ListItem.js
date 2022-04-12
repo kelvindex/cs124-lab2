@@ -9,7 +9,7 @@ function ListItem(props) {
 
     }
 
-    return <li>
+    return <li className="list-item">
         <input type="checkbox"
                id={listItem.id}
                onChange={() => props.onChangeCompletedItems(listItem)}

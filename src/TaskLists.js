@@ -1,5 +1,6 @@
-import {FaPlus, FaWindowClose} from "react-icons/fa";
+import {FaPlus, FaTrashAlt, FaWindowClose} from "react-icons/fa";
 import AddListPopUp from "./AddListPopUp";
+import DeleteListPopUp from "./DeleteListPopUp";
 
 
 function TaskLists(props) {
@@ -27,8 +28,9 @@ function TaskLists(props) {
                        id={l.id}
                        name="taskList"
                        value={l.id}
-                       onChange={() => props.onChangeCurrentList(l.id)}/>
+                       onChange={() => props.onChangeCurrentList(l.id, l.title)}/>
                 <label htmlFor={l.id}> {l.title}</label>
+
             </li>)}
         </ul>
 
