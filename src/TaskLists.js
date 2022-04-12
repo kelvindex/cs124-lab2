@@ -17,16 +17,17 @@ function TaskLists(props) {
         <button className="close-sidebar-button" onClick={props.onCloseSideBar} aria-label={"Close Task List"}><FaWindowClose/></button>
         <h3>Task Lists</h3>
         <button className="add-list-button" onClick={props.onAddListPopUp}><FaPlus/> New list</button>
-        <ul className="lists-menu">
+        <ul className="lists-menu" role="radiogroup" tabIndex="0">
             {props.lists.map(l =>
             <li key={l.id}>
-                {console.log(l.title)}
-                <button class="taskListButton"
+                <input type="radio"
+                       role="radio"
+                       aria-checked={props.currentListId === l.id}
                        checked={props.currentListId === l.id}
                        id={l.id}
                        name="taskList"
                        value={l.id}
-                       onClick={() => props.onChangeCurrentList(l.id)}/>
+                       onChange={() => props.onChangeCurrentList(l.id)}/>
                 <label htmlFor={l.id}> {l.title}</label>
             </li>)}
         </ul>

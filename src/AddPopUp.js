@@ -6,7 +6,7 @@ function AddPopUp(props) {
             <br/>
             <label id="addItem">
                 <input type="text" className="inputItem" placeholder="Add item" aria-label={"Add item"}
-                       onKeyPress={(e) => {props.onAddItem(e.key, e.target.value); if (e.key     === 'Enter') {e.target.value = ""}}}/>
+                       onKeyPress={(e) => {props.onAddItem(e.key, e.target.value); if (e.key === 'Enter') {e.target.value = ""}}}/>
             </label>
             <br/> <br/>
             {/*<input type="text" className="listItemValue"  onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>*/}

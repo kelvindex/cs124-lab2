@@ -52,7 +52,6 @@ function App() {
 
     const tasksListsQ = query(collection(db, collectionName));
     const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
-    console.log(tasksLists);
 
     const sortedQ = query(collection(db, collectionName, currentListId, subCollectionName), orderBy(orderType[0], orderType[1]));
     const [tasks, loading, error] = useCollectionData(sortedQ);
@@ -164,7 +163,8 @@ function App() {
         <div className="top-nav">
             <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
             <div id="titleBar">
-                <h1>{tasksLists.find(l => l.id === currentListId).title}</h1>
+                <h1>Tasks</h1>
+                {/*{tasksLists.find(l => l.id === currentListId).title}*/}
             </div>
         </div>
 
