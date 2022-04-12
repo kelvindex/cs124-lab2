@@ -82,3 +82,8 @@ Some key features include:
 completely avaiable**
 
 ![](toggle_hide_complete.png)
+
+**After Lab 4**
+The app now has a side panel and icons for editing
+![](side-panel.png)
+![](new-list.png)
