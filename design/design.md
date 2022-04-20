@@ -9,7 +9,7 @@ icons and how these attributes fit into the design
 + \#333 for header background color to create an aesthetically pleasing header bar
 + This scheme was inspired by color palettes \#27 on [this website](https://visme.co/blog/website-color-schemes/)
 
-Currently, the app only supports this "dark mode" but future iterations could have different,
+Currently, the signedInApp only supports this "dark mode" but future iterations could have different,
 potentially more accessible color schemes available
 
 ### Icons
@@ -27,7 +27,7 @@ We briefly considered using different color schemes that were
 brighter and more fun, but we figured it would ultimately be too
 distracting.
 
-Previous version of our app had a walk through element organized in 6 categories by
+Previous version of our signedInApp had a walk through element organized in 6 categories by
 buttons on the page as such:
 
 ![Image of task list page](index.png)
@@ -84,6 +84,6 @@ completely avaiable**
 ![](toggle_hide_complete.png)
 
 **After Lab 4**
-The app now has a side panel and icons for editing
+The signedInApp now has a side panel and icons for editing
 ![](side-panel.png)
 ![](new-list.png)

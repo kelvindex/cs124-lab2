@@ -2,7 +2,7 @@ body {
   background-color: #222629;
   color: white;
   margin: 0;
-  font-size: 14pt;
+  font-size: 12pt;
   font-family: "Roboto", sans-serif;
 }
 
@@ -44,26 +44,27 @@ ul li {
 #addItem {
   margin-left: 0;
   text-align: left;
-  font-size: 14px;
+  font-size: 12pt;
   color: #6B6E70;
 }
 
 button {
-  margin-left: 2.2em;
+  margin-left: 2.6em;
   background-color: darkred;
   box-shadow: black;
   font-family: "Roboto", sans-serif;
-  font-size: 14pt;
+  font-size: 12pt;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  padding: 6px;
+  padding: 4px;
+  vertical-align: center;
 }
 
 #uncomplete {
   margin: 3em 1em 3em 2.2em;
-  font-size: 14pt;
+  font-size: 12pt;
 }
 .fa-info-circle {
   color: #86C232;
@@ -217,7 +218,6 @@ h4 {
   margin-top: 8px;
   margin-bottom: 5px;
   margin-left: 7px;
-  font-size: 12pt;
   padding: 4px;
 }
 
@@ -239,7 +239,7 @@ h4 {
 
 .navbar {
   opacity: .97;
-  background-color: #86C232;
+  background-color: #51761E;
   position: absolute;
   top: 0;
   left: 0;
@@ -340,4 +340,12 @@ input[type="radio"] {
   opacity: 0;
   display: flex;
   size: 0px;
+}
+
+.delete-list-button {
+  padding: 3px;
+  border: 0;
+  outline: 0;
+  vertical-align: center;
+  margin-left: 15px;
 }
