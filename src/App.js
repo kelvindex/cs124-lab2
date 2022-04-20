@@ -1,4 +1,4 @@
-import {useAuthState, useCreateUserWithEmailAndPassword, useSignInWithGoogle} from 'react-firebase-hooks/auth';
+import {useAuthState, useSignInWithGoogle} from 'react-firebase-hooks/auth';
 import {getAuth} from "@firebase/auth";
 import SignedInApp from "./SignedInApp";
 import {FaGoogle} from "react-icons/fa";
@@ -9,7 +9,7 @@ function SignIn(props) {
         return <p>Already signed in</p>
     }
     else if (loading) {
-        return <div>logging in...</div>
+        return <div className={"login-loading"}>logging in...</div>
     }
 
     return <div className="sign-in-page"> {error && <div>there's been an error</div> }
