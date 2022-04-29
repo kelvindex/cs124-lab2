@@ -14,7 +14,7 @@ import EditPopUp from "./EditPopUp";
 import TaskLists from "./TaskLists";
 import DeleteListPopUp from "./DeleteListPopUp";
 import AddListPopUp from "./AddListPopUp";
-import {getAuth} from "@firebase/auth";
+import {getAuth} from "firebase/auth";
 import {useAuthState, useSignInWithGoogle} from "react-firebase-hooks/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -72,7 +72,7 @@ const auth = getAuth();
 
 function App() {
     const [user, userLoading, userError] = useAuthState(auth);
-    console.log(user);
+    console.log("User: ", user);
 
     if (userLoading) {
         return <div className="load">"loading..."</div>;
@@ -85,13 +85,13 @@ function App() {
     }
 
     return <>
-        {user ? <SignedInApp auth={auth} user={user} db={db}/> : <SignIn auth={auth}/> }
+        {user ? <SignedInApp auth={auth} user={user} /> : <SignIn auth={auth}/> }
     </>;
 
 }
 
 function SignIn() {
-    console.log(auth);
+    console.log("Auth: ", auth);
     const [signInWithGoogle, userGoogle, loadingGoogle, errorGoogle] = useSignInWithGoogle(auth);
     if (userGoogle) {
         return <p>Already signed in</p>
@@ -103,7 +103,7 @@ function SignIn() {
     return <div className="sign-in-page">
         {errorGoogle && <div>there's been an error: {errorGoogle.message}</div> }
         <p className="sign" align="center">Sign in</p>
-        <button className="sign-in-google" align="center" onClick={() => signInWithGoogle()}>
+        <button className="sign-in-google" onClick={() => signInWithGoogle()}>
             <FaGoogle/> Sign in with Google
         </button>
     </div>
