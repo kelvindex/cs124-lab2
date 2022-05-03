@@ -14,7 +14,7 @@ import EditPopUp from "./EditPopUp";
 import TaskLists from "./TaskLists";
 import DeleteListPopUp from "./DeleteListPopUp";
 import AddListPopUp from "./AddListPopUp";
-import {getAuth} from "firebase/auth";
+import {getAuth, signOut} from "firebase/auth";
 import {useAuthState, useSignInWithGoogle} from "react-firebase-hooks/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -32,7 +32,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionName = "TaskLists"
+const collectionName = "TaskLists-Auth"
 // const subCollectionName = "tasks";
 
 const auth = getAuth();
@@ -91,9 +91,9 @@ function App() {
 }
 
 function SignIn() {
-    console.log("Auth: ", auth);
-    const [signInWithGoogle, userGoogle, loadingGoogle, errorGoogle] = useSignInWithGoogle(auth);
-    if (userGoogle) {
+    // console.log("Auth: ", auth);
+    const [signInWithGoogle, googleUser, loadingGoogle, googleError] = useSignInWithGoogle(auth);
+    if (googleUser) {
         return <p>Already signed in</p>
     }
     else if (loadingGoogle) {
@@ -101,7 +101,7 @@ function SignIn() {
     }
 
     return <div className="sign-in-page">
-        {errorGoogle && <div>there's been an error: {errorGoogle.message}</div> }
+        {googleError && <div>there's been an error: {googleError.message}</div> }
         <p className="sign" align="center">Sign in</p>
         <button className="sign-in-google" onClick={() => signInWithGoogle()}>
             <FaGoogle/> Sign in with Google
@@ -134,7 +134,7 @@ function SignedInApp(props) {
     const tasksListsQ = query(collection(db, collectionName), where("owner", "==", props.user.uid));
     const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
 
-    const sortedQ = query(collection(db, collectionName, currentListId, subCollectionName), orderBy(orderType[0], orderType[1]),  where("owner", "==", props.user.uid));
+    const sortedQ = query(collection(db, collectionName, currentListId, subCollectionName), orderBy(orderType[0], orderType[1]));
     const [tasks, loading, error] = useCollectionData(sortedQ);
 
     function handleEditItem(itemId, value, field) {
@@ -212,8 +212,8 @@ function SignedInApp(props) {
     }
 
     if (error) {
-        console.log(error);
-        return "there's been an error"
+        console.log("App error: ", error);
+        return <div>there's been the following error in the app: {error.message}</div>
     }
 
     function handleOrderBy(ordering) {
@@ -263,6 +263,7 @@ function SignedInApp(props) {
                 <h1>{currentListId !== "" ? currentListTitle : "Create list"}
                     {currentListId !== "" ? <button className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
                         null }</h1>
+                <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
             </div>
         </div>
 
