@@ -9,8 +9,8 @@ function EditPopUp(props) {
             {props.children}
             <br/>
             <label id="addItem">
-                <input type="text" className="inputItem" defaultValue={value} onClick={(e) => e.stopPropagation()} onChange={(e) =>
-                {props.onFinishEdit(id, e.target.value, "value")}}/>
+                <input type="text" className="inputItem" defaultValue={value} onClick={(e) => e.stopPropagation()}
+                       onChange={(e) => {props.onFinishEdit(id, e.target.value, "value")}}/>
             </label>
             <br/> <br/>
             {/*<input type="text" className="listItemValue"  onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>*/}

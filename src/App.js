@@ -32,6 +32,7 @@ import {
     useSignInWithEmailAndPassword,
     useSignInWithGoogle
 } from "react-firebase-hooks/auth";
+import AddCollaboratorPopUp from "./AddCollaboratorPopUp";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -48,7 +49,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionName = "TaskLists-Auth"
+const collectionName = "TaskLists"
 // const subCollectionName = "tasks";
 
 const auth = getAuth();
@@ -191,6 +192,7 @@ function SignedInApp(props) {
     const [currentListTitle, setCurrentListTitle] = useState("Tasks");
 
     const [sharedWith, setSharedWith] = useState([]);
+    const [addCollabPopUp, setAddCollabPopUp] = useState(false);
 
     const tasksListsQ = query(collection(db, collectionName), where("owner", "==", props.user.uid));
     console.log("Uid: ", props.user.uid);
@@ -232,7 +234,7 @@ function SignedInApp(props) {
     function handleAddList(key, listName) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const newList = {title: listName, tasks: [], owner: props.user.uid,
+            const newList = {title: listName, owner: props.user.uid,
                 sharedWith: [], id: newId};
             setDoc(doc(db, collectionName, newId), newList);
             setCurrentListId(newId);
@@ -327,6 +329,17 @@ function SignedInApp(props) {
         handleDeleteListPopUp();
     }
 
+    function handleAddCollabPopUp() {
+        setAddCollabPopUp(!addCollabPopUp);
+    }
+
+    function handleAddCollab(key, email) {
+        if (key === 'Enter') {
+            updateDoc(doc(db, collectionName, currentListId), {... sharedWith, email});
+            handleAddCollabPopUp();
+        }
+    }
+
     return <>
         <div className="top-nav">
             <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
@@ -335,6 +348,7 @@ function SignedInApp(props) {
                     {currentListId !== "" ?
                         <button className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
                         null}</h1> {props.user.displayName || props.user.email}
+                <button onClick={handleAddCollabPopUp}>Add Collaborators</button>
                 <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
             </div>
         </div>
@@ -369,6 +383,7 @@ function SignedInApp(props) {
                                             priority={priorityValue}
         />}
 
+        {addCollabPopUp && <AddCollaboratorPopUp onAddCollab={handleAddCollab} onClose={handleAddCollabPopUp}/>}
         {currentListId !== "" && <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>}
         {addPopUp && <AddPopUp onAddItem={handleAddItem}
                                onClose={handleAddPopUp}
