@@ -335,7 +335,8 @@ function SignedInApp(props) {
 
     function handleAddCollab(key, email) {
         if (key === 'Enter') {
-            updateDoc(doc(db, collectionName, currentListId), {... sharedWith, email});
+            setSharedWith([...sharedWith, email]);
+            updateDoc(doc(db, collectionName, currentListId), {sharedWith: sharedWith});
             handleAddCollabPopUp();
         }
     }
