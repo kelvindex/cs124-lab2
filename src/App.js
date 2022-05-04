@@ -6,7 +6,18 @@ import {FaBars, FaGoogle, FaTrashAlt} from "react-icons/fa";
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {getFirestore, query, where, collection, setDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
+import {
+    getFirestore,
+    query,
+    where,
+    collection,
+    setDoc,
+    doc,
+    updateDoc,
+    deleteDoc,
+    orderBy,
+    serverTimestamp
+} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FaPlus} from "react-icons/fa";
 import AddPopUp from "./AddPopUp";
@@ -15,7 +26,12 @@ import TaskLists from "./TaskLists";
 import DeleteListPopUp from "./DeleteListPopUp";
 import AddListPopUp from "./AddListPopUp";
 import {getAuth, signOut} from "firebase/auth";
-import {useAuthState, useSignInWithGoogle} from "react-firebase-hooks/auth";
+import {
+    useAuthState,
+    useCreateUserWithEmailAndPassword,
+    useSignInWithEmailAndPassword,
+    useSignInWithGoogle
+} from "react-firebase-hooks/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,41 +53,9 @@ const collectionName = "TaskLists-Auth"
 
 const auth = getAuth();
 
-// function SignUp() {
-//     const [
-//         createUserWithEmailAndPassword,
-//         userCredential, loading, error
-//     ] = useCreateUserWithEmailAndPassword(auth);
-//     const [email, setEmail] = useState("");
-//     const [pw, setPw] = useState("");
-//
-//     if (userCredential) {
-//         // Shouldn't happen because App should see that
-//         // we are signed in.
-//         return <div>Unexpectedly signed in already</div>
-//     } else if (loading) {
-//         return <p>Signing up…</p>
-//     }
-//     return <div>
-//         {error && <p>"Error signing up: " {error.message}</p>}
-//         <label htmlFor='email'>email: </label>
-//         <input type="text" id='email' value={email}
-//                onChange={e=>setEmail(e.target.value)}/>
-//         <br/>
-//         <label htmlFor='pw'>pw: </label>
-//         <input type="text" id='pw' value={pw}
-//                onChange={e=>setPw(e.target.value)}/>
-//         <br/>
-//         <button onClick={() =>
-//             createUserWithEmailAndPassword(email, pw)}>
-//             Create test user
-//         </button>
-//
-//     </div>
-// }
-
 function App() {
     const [user, userLoading, userError] = useAuthState(auth);
+    const [signUpPopUp, setSignUpPopUp] = useState(false);
     console.log("User: ", user);
 
     if (userLoading) {
@@ -84,28 +68,103 @@ function App() {
         return "there's been an error logging in"
     }
 
+    function handleSignUpPopUp() {
+        setSignUpPopUp(!signUpPopUp);
+    }
+
     return <>
-        {user ? <SignedInApp auth={auth} user={user} /> : <SignIn auth={auth}/> }
+        {user ? <SignedInApp auth={auth} user={user}/> : <SignIn auth={auth} onSignUp={handleSignUpPopUp}/>}
+        {signUpPopUp && <SignUp onSignUp={handleSignUpPopUp} onClose={handleSignUpPopUp}/>}
     </>;
 
 }
 
-function SignIn() {
-    // console.log("Auth: ", auth);
+function SignIn(props) {
+    const [
+        signInWithEmailAndPassword,
+        epUser, loadingUser, epError
+    ] = useSignInWithEmailAndPassword(auth);
     const [signInWithGoogle, googleUser, loadingGoogle, googleError] = useSignInWithGoogle(auth);
-    if (googleUser) {
+
+    const [email, setEmail] = useState("");
+    const [pw, setPw] = useState("");
+
+
+    if (epUser || googleUser) {
         return <p>Already signed in</p>
-    }
-    else if (loadingGoogle) {
+    } else if (loadingUser || loadingGoogle) {
         return <div className={"login-loading"}>logging in...</div>
     }
 
     return <div className="sign-in-page">
-        {googleError && <div>there's been an error: {googleError.message}</div> }
+        {googleError && <div>there's been an error: {googleError.message}</div>}
+        {epError && <div>there's been an error: {epError.message}</div>}
         <p className="sign" align="center">Sign in</p>
+        <label htmlFor='email'>email: </label>
+        <input type="text" id='email' value={email} className={"creds"}
+               onChange={e => setEmail(e.target.value)}/>
+        <br/><br/>
+        <label htmlFor='pw'>pw: </label>
+        <input type="password" id='pw' value={pw} className={"creds"}
+               onChange={e => setPw(e.target.value)}/>
+        <br/> <br/>
+        <button onClick={() => signInWithEmailAndPassword(email, pw)}>
+            Sign in with email/pw
+        </button>
+        <br/>
+        <br/><br/><br/>
+        <p>Don't have an account with us?</p>
+        <br/>
         <button className="sign-in-google" onClick={() => signInWithGoogle()}>
             <FaGoogle/> Sign in with Google
         </button>
+        <br/><br/>
+        <button onClick={() => props.onSignUp()} className={"sign-up"}>Sign Up</button>
+    </div>
+}
+
+function SignUp(props) {
+    const [
+        createUserWithEmailAndPassword,
+        userCredential, loading, error
+    ] = useCreateUserWithEmailAndPassword(auth);
+    const [email, setEmail] = useState("");
+    const [pw, setPw] = useState("");
+
+    if (userCredential) {
+        // Shouldn't happen because App should see that
+        // we are signed in.
+        return <div>Already signed in</div>
+    } else if (loading) {
+        return <p>Signing up…</p>
+    }
+    return <div className="backdrop" onClick={() => props.onClose}>
+        <div className="modal">
+            <h4>Sign Up</h4>
+            {props.children}
+            <div className={"sign-up-page"}>
+                {error && <p>"Error signing up: " {error.message}</p>}
+                <label htmlFor='email'>email: </label>
+                <input type="text" id='email' value={email}
+                       onChange={(e) => setEmail(e.target.value)}/>
+                <br/>
+                <label htmlFor='pw'>pw: </label>
+                <input type="text" id='pw' value={pw}
+                       onChange={(e) => setPw(e.target.value)}/>
+                <br/><br/>
+                <div className="add-popup-buttons">
+                <button className={"alert-button alert-cancel"} type={"button"}
+                    onClick={() =>
+                    createUserWithEmailAndPassword(email, pw)}>
+                    Create account
+                </button>
+                <button className={"alert-button alert-ok"} type={"button"}
+                        onClick={() => props.onClose()}>
+                    Cancel
+                </button>
+                </div>
+            </div>
+        </div>
     </div>
 }
 
@@ -118,9 +177,9 @@ function SignedInApp(props) {
     const [priorityValue, setPriorityValue] = useState(0);
     const [addListPopUp, setAddListPopUp] = useState(false);
     const [deleteListPopUp, setDeleteListPopUp] = useState(false);
-    
+
     const [listItemData, setListItemData] = useState("");
-    
+
     const priorityOrder = ["priority", "desc"];
     const nameOrder = ["value", "asc"];
     const timeOrder = ["time", "asc"];
@@ -131,7 +190,10 @@ function SignedInApp(props) {
     const [subCollectionName, setSubCollectionName] = useState("");
     const [currentListTitle, setCurrentListTitle] = useState("Tasks");
 
+    const [sharedWith, setSharedWith] = useState([]);
+
     const tasksListsQ = query(collection(db, collectionName), where("owner", "==", props.user.uid));
+    console.log("Uid: ", props.user.uid);
     const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
 
     const sortedQ = query(collection(db, collectionName, currentListId, subCollectionName), orderBy(orderType[0], orderType[1]));
@@ -155,7 +217,14 @@ function SignedInApp(props) {
     function handleAddItem(key, value) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const newItem = {id: newId, value: value, completed: false, priority: priorityValue, time: serverTimestamp()};
+            const newItem = {
+                id: newId,
+                owner: props.user.uid,
+                value: value,
+                completed: false,
+                priority: priorityValue,
+                time: serverTimestamp()
+            };
             setDoc(doc(db, collectionName, currentListId, subCollectionName, newId), newItem);
         }
     }
@@ -163,7 +232,8 @@ function SignedInApp(props) {
     function handleAddList(key, listName) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const newList = {title: listName, tasks: [], id: newId};
+            const newList = {title: listName, tasks: [], owner: props.user.uid,
+                sharedWith: [], id: newId};
             setDoc(doc(db, collectionName, newId), newList);
             setCurrentListId(newId);
             setCurrentListTitle(listName);
@@ -213,17 +283,18 @@ function SignedInApp(props) {
 
     if (error) {
         console.log("App error: ", error);
-        return <div>there's been the following error in the app: {error.message}</div>
+        return <div>there's been the following error in the app: {error.message}
+            <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
+
+        </div>
     }
 
     function handleOrderBy(ordering) {
         if (ordering === "priority") {
             setOrderType(priorityOrder);
-        }
-        else if (ordering === "name") {
+        } else if (ordering === "name") {
             setOrderType(nameOrder)
-        }
-        else {
+        } else {
             setOrderType(timeOrder)
         }
 
@@ -261,8 +332,9 @@ function SignedInApp(props) {
             <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
             <div id="titleBar">
                 <h1>{currentListId !== "" ? currentListTitle : "Create list"}
-                    {currentListId !== "" ? <button className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
-                        null }</h1>
+                    {currentListId !== "" ?
+                        <button className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
+                        null}</h1> {props.user.displayName || props.user.email}
                 <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
             </div>
         </div>
@@ -278,20 +350,23 @@ function SignedInApp(props) {
                                  onDeleteListPopUp={handleDeleteListPopUp}
                                  onChangeCurrentList={handleSetCurrentListId}/>
         }
-        {currentListId === "" && <button className="add-list-button" onClick={handleAddListPopUp}><FaPlus/> New list</button>}
-        {addListPopUp && <AddListPopUp onAddNewList={handleAddList} onClose={handleAddListPopUp}> <h4>New List</h4></AddListPopUp>}
-        {deleteListPopUp && <DeleteListPopUp onDelete={handleDeleteList} onClose={handleDeleteListPopUp}>Delete this list?</DeleteListPopUp>}
+        {currentListId === "" &&
+            <button className="add-list-button" onClick={handleAddListPopUp}><FaPlus/> New list</button>}
+        {addListPopUp &&
+            <AddListPopUp onAddNewList={handleAddList} onClose={handleAddListPopUp}><h4>New List</h4></AddListPopUp>}
+        {deleteListPopUp && <DeleteListPopUp onDelete={handleDeleteList} onClose={handleDeleteListPopUp}>Delete this
+            list?</DeleteListPopUp>}
 
         {currentListId !== "" && <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
-                   onSelectAll={handleSelectAll}
-                   onDeselectAll={handleDeselectAll}
-                   onCompletedToggle={handleToggleCompleted}
-                   onChangeCompletedItems={handleChangeCompletedItems}
-                   onToggleEditItem={handleEditPopUp}
-                   onAddItem={handleAddItem}
-                   onOrderBy={handleOrderBy}
-                   onGetListItemData={getListItemData}
-                   priority={priorityValue}
+                                            onSelectAll={handleSelectAll}
+                                            onDeselectAll={handleDeselectAll}
+                                            onCompletedToggle={handleToggleCompleted}
+                                            onChangeCompletedItems={handleChangeCompletedItems}
+                                            onToggleEditItem={handleEditPopUp}
+                                            onAddItem={handleAddItem}
+                                            onOrderBy={handleOrderBy}
+                                            onGetListItemData={getListItemData}
+                                            priority={priorityValue}
         />}
 
         {currentListId !== "" && <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>}
