@@ -1,7 +1,7 @@
 import {useState} from "react";
 import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
-import {FaBars, FaPlus, FaTrashAlt, FaUserPlus} from "react-icons/fa";
+import {FaBars, FaPlus, FaTrashAlt, FaUser, FaUsers} from "react-icons/fa";
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
@@ -11,7 +11,7 @@ import TaskLists from "./TaskLists";
 import AddListPopUp from "./AddListPopUp";
 import {getAuth, signOut} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
-import AddCollaboratorPopUp from "./AddCollaboratorPopUp";
+import ManageCollaborators from "./ManageCollaborators";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -79,7 +79,7 @@ function SignedInApp(props) {
     const [currentListId, setCurrentListId] = useState("");
     const [currentListTitle, setCurrentListTitle] = useState("Tasks");
 
-    const [sharedWithLocal, setSharedWithLocal] = useState([]);
+    const [sharedWithLocal, setSharedWithLocal] = useState([props.user.email]);
     const [addCollabPopUp, setAddCollabPopUp] = useState(false);
 
     const tasksListsQ = query(collection(db, collectionName), where("owner", "==", props.user.uid));
@@ -170,13 +170,13 @@ function SignedInApp(props) {
             <div id="titleBar">
                 <h1>{currentListId !== "" ? currentListTitle : "Create list"}
                     {currentListId !== "" ?
-                        <button style={{verticalAlign: 'middle'}} className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
+                        <button style={{verticalAlign: 'middle'}} className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt /></button> :
                         null}</h1>
 
-                {currentListId !== "" && <button className={"add-collab-button"} onClick={handleAddCollabPopUp}><FaUserPlus style={{verticalAlign: 'text-top'}}/> Add Collaborators</button>}
+                {currentListId !== "" && <button className={"add-collab-button"} onClick={handleAddCollabPopUp}><FaUsers style={{verticalAlign: 'text-top'}}/> Collaborators</button>}
 
                 <div className={"right-navbar"}>
-                    <p>{props.user.displayName || props.user.email}</p>
+                    <p><FaUser style={ {verticalAlign: 'text-bottom'}}/> {props.user.displayName || props.user.email}</p>
                     <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
                 </div>
 
@@ -223,7 +223,7 @@ function SignedInApp(props) {
                                             showDeleteAlert={showDeleteAlert}
         />}
 
-        {addCollabPopUp && <AddCollaboratorPopUp onAddCollab={handleAddCollab} onClose={handleAddCollabPopUp}/>}
+        {addCollabPopUp && <ManageCollaborators onAddCollab={handleAddCollab} sharedWith={sharedWithLocal} onClose={handleAddCollabPopUp}/>}
         {currentListId !== "" && <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>}
 
         <br/><br/>

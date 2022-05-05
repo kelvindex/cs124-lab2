@@ -384,15 +384,3 @@ p {
   vertical-align: text-bottom;
 }
 
-.add-collab-button {
-  border-radius: 3px;
-  margin-left: 20px;
-  background-color: transparent;
-  border-style: solid;
-  border-width: .75px;
-  border-color: orange;
-}
-
-.collab-modal {
-  padding-top: 40px;
-}

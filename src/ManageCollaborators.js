@@ -1,8 +1,21 @@
-function AddCollaboratorPopUp(props) {
+import Collaborator from "./Collaborator";
+
+function ManageCollaborators(props) {
     return <div className="backdrop" onClick={props.onClose}>
-        <div className="modal">
-            <div className={"collab-modal"}>
+        <div className="collab-modal">
+            <div className={"collab-modal-content"}>
                 {props.children}
+
+                <div className={"collaborators-container"}>
+                    <ul className={"collaborators"}>
+                        {props.sharedWith.map(p =>
+                            <Collaborator
+                                email={p}
+                            />
+                        )}
+                    </ul>
+                </div>
+
                 <br/>
                 <label id="addItem">
                     <input type="email" className="inputItem" placeholder="helper@domain.com"
@@ -26,4 +39,4 @@ function AddCollaboratorPopUp(props) {
     </div>
 }
 
-export default AddCollaboratorPopUp;
+export default ManageCollaborators;
