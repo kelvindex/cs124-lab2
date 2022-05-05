@@ -385,3 +385,8 @@ p {
   vertical-align: text-bottom;
 }
 
+.verify-email-button {
+  background-color: #86C232;
+  margin-bottom: 5px;
+  margin-top: 3px;
+}

@@ -2,6 +2,7 @@ import {useState} from "react";
 import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {FaBars, FaPlus, FaTrashAlt, FaUser, FaUsers} from "react-icons/fa";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
@@ -9,7 +10,7 @@ import {collection, doc, getFirestore, query, setDoc, updateDoc, where} from "fi
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import TaskLists from "./TaskLists";
 import AddListPopUp from "./AddListPopUp";
-import {getAuth, signOut} from "firebase/auth";
+import {getAuth, sendEmailVerification, signOut} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
 import ManageCollaborators from "./ManageCollaborators";
 import SignUp from "./SignUp";
@@ -38,6 +39,10 @@ function App() {
     const [user, userLoading, userError] = useAuthState(auth);
     const [signUpPopUp, setSignUpPopUp] = useState(false);
 
+    function verifyEmail() {
+        sendEmailVerification(user);
+    }
+
     if (userLoading) {
         return <div className="load">"loading..."</div>;
     }
@@ -52,7 +57,7 @@ function App() {
     }
 
     return <>
-        {user ? <SignedInApp auth={auth} user={user}/> : <SignIn auth={auth} onSignUp={handleSignUpPopUp}/>}
+        {user ? <SignedInApp auth={auth} user={user} verifyEmail={verifyEmail}/> : <SignIn auth={auth} onSignUp={handleSignUpPopUp}/>}
         {signUpPopUp && <SignUp auth={auth} onSignUp={handleSignUpPopUp} onClose={handleSignUpPopUp}/>}
 
     </>;
@@ -82,7 +87,10 @@ function SignedInApp(props) {
     const [addCollabPopUp, setAddCollabPopUp] = useState(false);
     const [sharedWithLocal, setSharedWithLocal] = useState([props.user.email, "magalingouabou@gmail.com"]);
 
-    const tasksListsQ = query(collection(db, collectionName), where("sharedWith", "array-contains", props.user.email), where("owner", "==", props.user.uid));
+    // questions:
+    // 1. what is the syntax for updating the sharedwith list in the cloud? and do i use a get
+    // in order to use and display the list from the code base?
+    const tasksListsQ = query(collection(db, collectionName), where("sharedWith", "array-contains", props.user.email));
     const [taskLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
 
     function handleEditPopUp() {
@@ -164,6 +172,12 @@ function SignedInApp(props) {
         }
     }
 
+    function handleVerifyEmail() {
+        console.log("got clicked");
+        NotificationManager.warning("Please check your inbox", "Verification email sent", 3000);
+        props.verifyEmail();
+    }
+
     return <>
         <div className="top-nav">
             <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
@@ -177,6 +191,7 @@ function SignedInApp(props) {
 
                 <div className={"right-navbar"}>
                     <p><FaUser style={ {verticalAlign: 'text-bottom'}}/> {props.user.displayName || props.user.email}</p>
+                    {!props.user.emailVerified && <button type="button" className={'verify-email-button'} onClick={handleVerifyEmail}>Verify email</button>}
                     <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
                 </div>
 
@@ -229,6 +244,7 @@ function SignedInApp(props) {
         <br/><br/>
         {currentListId !== "" && !completedToggle &&
             <button id="delete" onClick={handleDeleteCompletedPopUp}>Delete completed items</button>}
+        <NotificationContainer/>
     </>;
 }
 
