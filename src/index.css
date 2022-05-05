@@ -2,7 +2,7 @@ body {
   background-color: #222629;
   color: white;
   margin: 0;
-  font-size: 12pt;
+  font-size: 11pt;
   font-family: "Roboto", sans-serif;
 }
 
@@ -28,7 +28,7 @@ h1 {
 ul {
   list-style: none;
   font-family: "Roboto", sans-serif;
-  font-size: 14pt;
+  font-size: 12pt;
 }
 
 ul li {
@@ -44,21 +44,19 @@ ul li {
 #addItem {
   margin-left: 0;
   text-align: left;
-  font-size: 12pt;
   color: #6B6E70;
 }
 
 button {
-  margin-left: 2.6em;
+  margin-left: 2.7em;
   background-color: darkred;
   box-shadow: black;
   font-family: "Roboto", sans-serif;
-  font-size: 12pt;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
-  padding: 4px;
+  padding: 3px 15px;
   vertical-align: center;
 }
 
@@ -66,11 +64,8 @@ button {
   margin: 3em 1em 3em 2.2em;
   font-size: 12pt;
 }
-.fa-info-circle {
-  color: #86C232;
-}
 
-input[type=text] {
+.inputItem {
   font-family: "Roboto", sans-serif;
   color: white;
   background-color: transparent;
