@@ -17,8 +17,7 @@ function EditPopUp(props) {
                            }}/>
                 </label>
                 <br/> <br/>
-                {/*<input type="text" className="listItemValue"  onChange={e => props.onEditItem(listItem.id, e.target.value, "value")}/>*/}
-                {/*<button className="editButton" onClick={}><FaEdit color="#86C232"/></button>*/}
+
                 <p> Priority: &nbsp;
                     <select id="select-priority" defaultValue={priority} aria-label={"select Priority"}
                             onChange={e => props.onEditPriority(id, parseInt(e.target.value), "priority")}>

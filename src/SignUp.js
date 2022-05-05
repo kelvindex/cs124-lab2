@@ -10,9 +10,7 @@ function SignUp(props) {
     const [pw, setPw] = useState("");
 
     if (userCredential) {
-        // Shouldn't happen because App should see that
-        // we are signed in.
-        return <div>Already signed in</div>
+        return <></>
     } else if (loading) {
         return <p>Signing up…</p>
     }

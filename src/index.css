@@ -148,7 +148,7 @@ input[type=checkbox]:focus {
   right: 300pt;
   width: 100vw;
   height: 100vh;
-  z-index: 4;
+  z-index: 2;
   background-color: rgba(0, 0, 0, .8);
 }
 
@@ -189,6 +189,7 @@ input[type=checkbox]:focus {
   margin-top: 5em;
   margin-left: -22px;
 }
+
 
 .alert-ok {
   background-color: darkred;

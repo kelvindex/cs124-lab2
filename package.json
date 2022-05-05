@@ -5,11 +5,12 @@
   "build": "set \"CI=false\" && react-scripts build",
   "dependencies": {
     "@firebase/auth": "^0.19.11",
+    "@firebase/firestore-types": "^2.5.0",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^9.6.8",
-    "firebase-tools": "^10.6.0",
+    "firebase-tools": "^10.8.0",
     "path": "^0.12.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

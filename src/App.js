@@ -30,7 +30,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionName = "TaskLists-Auth"
+const collectionName = "TaskLists-Sharing";
 
 const auth = getAuth();
 
@@ -79,10 +79,10 @@ function SignedInApp(props) {
     const [currentListId, setCurrentListId] = useState("");
     const [currentListTitle, setCurrentListTitle] = useState("Tasks");
 
-    const [sharedWithLocal, setSharedWithLocal] = useState([props.user.email]);
     const [addCollabPopUp, setAddCollabPopUp] = useState(false);
+    const [sharedWithLocal, setSharedWithLocal] = useState([props.user.email, "magalingouabou@gmail.com"]);
 
-    const tasksListsQ = query(collection(db, collectionName), where("owner", "==", props.user.uid));
+    const tasksListsQ = query(collection(db, collectionName), where("sharedWith", "array-contains", props.user.email), where("owner", "==", props.user.uid));
     const [taskLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
 
     function handleEditPopUp() {
@@ -98,7 +98,7 @@ function SignedInApp(props) {
             const newId = generateUniqueID();
             const newList = {
                 title: listName, owner: props.user.uid,
-                sharedWith: [], id: newId
+                sharedWith: [props.user.email, "magalingouabou@gmail.com"], id: newId
             };
             setDoc(doc(db, collectionName, newId), newList);
             setCurrentListId(newId);

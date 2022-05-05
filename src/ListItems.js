@@ -16,14 +16,14 @@ function ListItems(props) {
         return <div className="load">"loading..."</div>;
     }
 
-    if (error) {
+    else if (error) {
         console.log("App error: ", error);
         return <div>
-            there's been the following error in the app: {error.message}
+            there's been the following error in accessing the task list: {error.message}
         </div>
     }
 
-    if (tasks) {
+    else if (tasks) {
 
         const data = props.completedToggle ? tasks.filter(i => !i.completed) : tasks;
 
