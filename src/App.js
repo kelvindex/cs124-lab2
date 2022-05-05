@@ -1,7 +1,7 @@
 import {useState} from "react";
 import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
-import {FaBars, FaGoogle, FaPlus, FaTrashAlt, FaUserPlus} from "react-icons/fa";
+import {FaBars, FaPlus, FaTrashAlt, FaUserPlus} from "react-icons/fa";
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
@@ -10,13 +10,10 @@ import {useCollectionData} from "react-firebase-hooks/firestore";
 import TaskLists from "./TaskLists";
 import AddListPopUp from "./AddListPopUp";
 import {getAuth, signOut} from "firebase/auth";
-import {
-    useAuthState,
-    useCreateUserWithEmailAndPassword,
-    useSignInWithEmailAndPassword,
-    useSignInWithGoogle
-} from "react-firebase-hooks/auth";
+import {useAuthState} from "react-firebase-hooks/auth";
 import AddCollaboratorPopUp from "./AddCollaboratorPopUp";
+import SignUp from "./SignUp";
+import SignIn from "./SignIn";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -34,21 +31,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const collectionName = "TaskLists-Auth"
-// const subCollectionName = "tasks";
 
 const auth = getAuth();
 
 function App() {
     const [user, userLoading, userError] = useAuthState(auth);
     const [signUpPopUp, setSignUpPopUp] = useState(false);
-    console.log("User: ", user);
 
     if (userLoading) {
         return <div className="load">"loading..."</div>;
     }
 
     if (userError) {
-        console.log("User info: ", user);
         console.log(userError);
         return "there's been an error logging in"
     }
@@ -59,100 +53,10 @@ function App() {
 
     return <>
         {user ? <SignedInApp auth={auth} user={user}/> : <SignIn auth={auth} onSignUp={handleSignUpPopUp}/>}
-        {signUpPopUp && <SignUp onSignUp={handleSignUpPopUp} onClose={handleSignUpPopUp}/>}
+        {signUpPopUp && <SignUp auth={auth} onSignUp={handleSignUpPopUp} onClose={handleSignUpPopUp}/>}
     </>;
 
 }
-
-function SignIn(props) {
-    const [
-        signInWithEmailAndPassword,
-        epUser, loadingUser, epError
-    ] = useSignInWithEmailAndPassword(auth);
-    const [signInWithGoogle, googleUser, loadingGoogle, googleError] = useSignInWithGoogle(auth);
-
-    const [email, setEmail] = useState("");
-    const [pw, setPw] = useState("");
-
-
-    if (epUser || googleUser) {
-        return <p>Already signed in</p>
-    } else if (loadingUser || loadingGoogle) {
-        return <div className={"login-loading"}>logging in...</div>
-    }
-
-    return <div className="sign-in-page">
-        {googleError && <div>there's been an error: {googleError.message}</div>}
-        {epError && <div>there's been an error: {epError.message}</div>}
-        <p className="sign" align="center">Sign in</p>
-        <label htmlFor='email'>email: </label>
-        <input type="text" id='email' value={email} className={"creds"}
-               onChange={e => setEmail(e.target.value)}/>
-        <br/><br/>
-        <label htmlFor='pw'>pw: </label>
-        <input type="password" id='pw' value={pw} className={"creds"}
-               onChange={e => setPw(e.target.value)}/>
-        <br/> <br/>
-        <button onClick={() => signInWithEmailAndPassword(email, pw)}>
-            Sign in with email/pw
-        </button>
-        <br/>
-        <br/><br/><br/>
-        <p>Don't have an account with us?</p>
-        <br/>
-        <button className="sign-in-google" onClick={() => signInWithGoogle()}>
-            <FaGoogle/> Sign in with Google
-        </button>
-        <br/><br/>
-        <button onClick={() => props.onSignUp()} className={"sign-up"}>Sign Up</button>
-    </div>
-}
-
-function SignUp(props) {
-    const [
-        createUserWithEmailAndPassword,
-        userCredential, loading, error
-    ] = useCreateUserWithEmailAndPassword(auth);
-    const [email, setEmail] = useState("");
-    const [pw, setPw] = useState("");
-
-    if (userCredential) {
-        // Shouldn't happen because App should see that
-        // we are signed in.
-        return <div>Already signed in</div>
-    } else if (loading) {
-        return <p>Signing up…</p>
-    }
-    return <div className="backdrop" onClick={() => props.onClose}>
-        <div className="modal">
-            <h4>Sign Up</h4>
-            {props.children}
-            <div className={"sign-up-page"}>
-                {error && <p>"Error signing up: " {error.message}</p>}
-                <label htmlFor='email'>email: </label>
-                <input type="text" id='email' value={email}
-                       onChange={(e) => setEmail(e.target.value)}/>
-                <br/>
-                <label htmlFor='pw'>pw: </label>
-                <input type="text" id='pw' value={pw}
-                       onChange={(e) => setPw(e.target.value)}/>
-                <br/><br/>
-                <div className="add-popup-buttons">
-                    <button className={"alert-button alert-cancel"} type={"button"}
-                            onClick={() =>
-                                createUserWithEmailAndPassword(email, pw)}>
-                        Create account
-                    </button>
-                    <button className={"alert-button alert-ok"} type={"button"}
-                            onClick={() => props.onClose()}>
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
 
 function SignedInApp(props) {
     const [completedToggle, setCompletedToggle] = useState(false);
@@ -254,7 +158,6 @@ function SignedInApp(props) {
     function handleAddCollab(key, email) {
         if (key === 'Enter') {
             setSharedWithLocal([...sharedWithLocal, email]);
-            console.log("Shared with: ", sharedWithLocal);
             updateDoc(doc(db, collectionName, currentListId), {sharedWith: sharedWithLocal});
             handleAddCollabPopUp();
         }

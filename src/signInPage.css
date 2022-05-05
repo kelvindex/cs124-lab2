@@ -1,3 +1,37 @@
 .sign-in-google {
     background-color: #86C232;
 }
+
+.error-message {
+    font-size: 10pt;
+}
+
+label {
+    font-size: 10pt;
+}
+
+.creds {
+    outline: 0;
+}
+
+.sign-up-modal{
+    height: 12em;
+}
+
+.sign-up-buttons {
+    display: flex;
+}
+
+.sign-up-button {
+    font-size: 10pt;
+}
+
+.enter-creds {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+.enter-creds input[type=text] {
+    outline: 0;
+}
