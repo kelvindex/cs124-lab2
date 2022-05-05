@@ -349,3 +349,20 @@ input[type="radio"] {
   vertical-align: center;
   margin-left: 15px;
 }
+
+.right-navbar {
+  float: right;
+  display: flex;
+  flex-direction: column;
+  margin-right: 15px;
+  margin-top: -90px;
+}
+
+.sign-out {
+  font-size: 10pt;
+  padding: .25em;
+}
+
+p {
+  margin-bottom: 5px;
+}

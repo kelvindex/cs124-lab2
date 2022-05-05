@@ -9,7 +9,7 @@ function TaskLists(props) {
 
     if (props.error) {
         console.log(props.error);
-        return "there's been an error"
+        return <div>there's been an error: {props.error.message}</div>
     }
 
     return <div className="navbar">
