@@ -22,14 +22,14 @@ function SignIn(props) {
         {googleError && <div>there's been an error: {googleError.message}</div>}
         {epError && <div>there's been an error: {epError.message}</div>}
         <div className={"top-nav"}><h1 className={"sign-in-title"}>Task Lists</h1></div>
-        <h3 className={"sign-in-heading"} align="center">Sign in</h3>
+        <h3 className={"sign-in-heading"} align="center">Login</h3>
 
         <div className={"enter-creds"}>
             <div className={"input-creds"}>
                 <input type="email" id='email' value={email} placeholder={"Email address"} className={"creds"}
                        onChange={e => setEmail(e.target.value)}/>
                 <br/><br/>
-                <input type="password" id='pw' value={pw} placeholder={"Password"} className={"creds"}
+                <input type="password" id='pw' value={pw} placeholder={"Password"} className={"creds pw"}
                        onChange={e => setPw(e.target.value)}/>
             </div>
 

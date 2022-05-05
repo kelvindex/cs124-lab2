@@ -170,13 +170,16 @@ function SignedInApp(props) {
             <div id="titleBar">
                 <h1>{currentListId !== "" ? currentListTitle : "Create list"}
                     {currentListId !== "" ?
-                        <button className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
+                        <button style={{verticalAlign: 'middle'}} className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
                         null}</h1>
-                {currentListId !== "" && <button onClick={handleAddCollabPopUp}><FaUserPlus/> Add Collaborators</button>}
+
+                {currentListId !== "" && <button className={"add-collab-button"} onClick={handleAddCollabPopUp}><FaUserPlus style={{verticalAlign: 'text-top'}}/> Add Collaborators</button>}
+
                 <div className={"right-navbar"}>
                     <p>{props.user.displayName || props.user.email}</p>
                     <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
                 </div>
+
             </div>
         </div>
 

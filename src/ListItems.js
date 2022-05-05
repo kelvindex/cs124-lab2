@@ -74,17 +74,17 @@ function ListItems(props) {
         }
 
         return <>
-            <label htmlFor="completed-toggle" id="uncomplete">Hide completed </label><input type="checkbox"
+            <label htmlFor="completed-toggle" id="uncomplete">Hide completed</label> <input type="checkbox"
                                                                                             id="completed-toggle"
                                                                                             onChange={props.onCompletedToggle}
                                                                                             className="toggle"/>
 
             <br/>
             <div className="priority-buttons">
-                <button className="order-priority" onClick={() => props.onOrderBy("priority")}>Order by priority
+                <button className="order-priority" onClick={() => props.onOrderBy("priority")}>Priority
                 </button>
-                <button className="order-priority" onClick={() => props.onOrderBy("name")}>Order by name</button>
-                <button className="order-priority" onClick={() => props.onOrderBy("time")}>Order by time</button>
+                <button className="order-priority" onClick={() => props.onOrderBy("name")}>Name</button>
+                <button className="order-priority" onClick={() => props.onOrderBy("time")}>Time</button>
             </div>
 
             <ul className="list-items">

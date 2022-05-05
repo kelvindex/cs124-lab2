@@ -47,14 +47,18 @@ label {
 .sign-up {
     background-color: transparent;
     border: .5px solid;
+    margin-top: 1em;
+    margin-bottom: .5em;
 }
 
 .sign-up-modal{
-    height: 12em;
+    height: 17em;
 }
 
 .sign-up-buttons {
     display: flex;
+    margin-left: -2em;
+    font-weight: 700;
 }
 
 .sign-up-button {
@@ -64,15 +68,24 @@ label {
 .enter-creds {
     display: flex;
     flex-direction: column;
-    margin-top: 15px;
+    margin-top: 2em;
     align-items: center;
+}
+
+.pw {
+    margin-bottom: 1em;
 }
 
 .enter-creds input[type=text] {
     outline: 0;
 }
 
+.input-creds {
+    margin-top: .75em;
+}
+
 .sign-in-option-button {
+    margin-top: .5em;
     margin-left: 0;
 }
 

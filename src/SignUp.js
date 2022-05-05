@@ -25,14 +25,12 @@ function SignUp(props) {
 
                 <div className={"enter-creds"}>
                     <div className={"input-creds"}>
-                        <label htmlFor='email'>Email: </label>
-                        <input type="email" id='email' value={email} className={"creds"}
+                        <input type="email" id='email' placeholder={"Email address"} value={email} className={"creds"}
                                onChange={(e) => setEmail(e.target.value)}/>
                     </div>
                     <br/>
                     <div className={"input-creds"}>
-                        <label htmlFor='pw'>Password: </label>
-                        <input type="text" id='pw' value={pw} className={"creds"}
+                        <input type="text" id='pw' placeholder={"Password"} value={pw} className={"creds"}
                                onChange={(e) => setPw(e.target.value)}/>
                     </div>
                 </div>
