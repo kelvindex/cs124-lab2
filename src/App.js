@@ -1,18 +1,17 @@
 import {useState} from "react";
 import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
-import {FaBars, FaPlus, FaTrashAlt, FaUser, FaUsers} from "react-icons/fa";
+import {FaBars, FaPlus, FaTrashAlt, FaUser} from "react-icons/fa";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {collection, doc, getFirestore, query, setDoc, updateDoc, getDoc, where} from "firebase/firestore";
+import {collection, doc, getFirestore, query, setDoc, where} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import TaskLists from "./TaskLists";
 import AddListPopUp from "./AddListPopUp";
 import {getAuth, sendEmailVerification, signOut} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
-import ManageCollaborators from "./ManageCollaborators";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -83,9 +82,9 @@ function SignedInApp(props) {
     const [showLists, setShowLists] = useState(false);
     const [currentListId, setCurrentListId] = useState("");
     const [currentListTitle, setCurrentListTitle] = useState("Tasks");
+    const [sharedWithLocal, setSharedWithLocal] = useState([])
 
     const [addCollabPopUp, setAddCollabPopUp] = useState(false);
-    const [sharedWithLocal, setSharedWithLocal] = useState([props.user.email])
     const tasksListsQ = query(collection(db, collectionName), where("sharedWith", "array-contains", props.user.email));
     const [taskLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
 
@@ -164,21 +163,8 @@ function SignedInApp(props) {
         setAddCollabPopUp(!addCollabPopUp);
     }
 
-    async function handleAddCollab(key, email) {
-        const data = await getDoc(doc(db, collectionName, currentListId));
-        const values = data.data();
-        const sharedWithList = values.sharedWith;
-
-        if (key === 'Enter') {
-            if (sharedWithList.indexOf(email) !== -1) {
-                NotificationManager.error("List already shared with " + email, "Failed to share", 3000);
-            } else {
-                NotificationManager.success("New member: " + email, "Collaborator added", 3000);
-                updateDoc(doc(db, collectionName, currentListId), {sharedWith: [...sharedWithList, email]});
-                setSharedWithLocal([...sharedWithList, email]);
-                handleAddCollabPopUp();
-            }
-        }
+    function handleUpdateSharedWithLocal(updatedList) {
+        setSharedWithLocal(updatedList);
     }
 
     function handleVerifyEmail() {
@@ -194,8 +180,6 @@ function SignedInApp(props) {
                     {currentListId !== "" ?
                         <button style={{verticalAlign: 'middle'}} className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt /></button> :
                         null}</h1>
-
-                {currentListId !== "" && <button className={"add-collab-button"} onClick={handleAddCollabPopUp}><FaUsers style={{verticalAlign: 'text-top'}}/> Collaborators</button>}
 
                 <div className={"right-navbar"}>
                     <p><FaUser style={ {verticalAlign: 'text-bottom'}}/> {props.user.displayName || props.user.email}</p>
@@ -231,6 +215,9 @@ function SignedInApp(props) {
                                             onDeleteCompletedPopUp={handleDeleteCompletedPopUp}
                                             onAddPopUp={handleAddPopUp}
                                             onEditPopUp={handleEditPopUp}
+                                            onAddCollabPopUp={handleAddCollabPopUp}
+                                            onUpdateSharedWithLocal={handleUpdateSharedWithLocal}
+                                            sharedWithLocal={sharedWithLocal}
                                             currentListId={currentListId}
                                             priority={priorityValue}
                                             completedToggle={completedToggle}
@@ -242,14 +229,9 @@ function SignedInApp(props) {
                                             addPopUp={addPopUp}
                                             deleteListPopUp={deleteListPopUp}
                                             showDeleteAlert={showDeleteAlert}
+                                            addCollabPopUp={addCollabPopUp}
         />}
 
-        {addCollabPopUp && <ManageCollaborators ownerEmail={props.user.email} onAddCollab={handleAddCollab} sharedWith={sharedWithLocal} onClose={handleAddCollabPopUp}/>}
-        {currentListId !== "" && <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>}
-
-        <br/><br/>
-        {currentListId !== "" && !completedToggle &&
-            <button id="delete" onClick={handleDeleteCompletedPopUp}>Delete completed items</button>}
         <NotificationContainer/>
     </>;
 }
