@@ -144,7 +144,6 @@ function SignedInApp(props) {
 
     function getListItemData(listItemData) {
         setListItemData(listItemData);
-        console.log("data: ", listItemData);
     }
 
     function handleShowLists() {
@@ -173,7 +172,6 @@ function SignedInApp(props) {
     }
 
     function handleVerifyEmail() {
-        console.log("got clicked");
         NotificationManager.warning("Please check your inbox", "Verification email sent", 3000);
         props.verifyEmail();
     }

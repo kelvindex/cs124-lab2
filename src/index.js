@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import './signInPage.css'
 import './collabs.css'
-import './notify.css'
 import '/node_modules/react-notifications/lib/notifications.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
