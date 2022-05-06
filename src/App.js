@@ -6,7 +6,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {collection, doc, getFirestore, query, setDoc, updateDoc, where} from "firebase/firestore";
+import {collection, doc, getFirestore, query, setDoc, updateDoc, getDoc, where} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import TaskLists from "./TaskLists";
 import AddListPopUp from "./AddListPopUp";
@@ -85,11 +85,7 @@ function SignedInApp(props) {
     const [currentListTitle, setCurrentListTitle] = useState("Tasks");
 
     const [addCollabPopUp, setAddCollabPopUp] = useState(false);
-    const [sharedWithLocal, setSharedWithLocal] = useState([props.user.email, "magalingouabou@gmail.com"]);
-
-    // questions:
-    // 1. what is the syntax for updating the sharedwith list in the cloud? and do i use a get
-    // in order to use and display the list from the code base?
+    const [sharedWithLocal, setSharedWithLocal] = useState([props.user.email])
     const tasksListsQ = query(collection(db, collectionName), where("sharedWith", "array-contains", props.user.email));
     const [taskLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
 
@@ -106,9 +102,10 @@ function SignedInApp(props) {
             const newId = generateUniqueID();
             const newList = {
                 title: listName, owner: props.user.uid,
-                sharedWith: [props.user.email, "magalingouabou@gmail.com"], id: newId
+                sharedWith: [props.user.email], id: newId
             };
             setDoc(doc(db, collectionName, newId), newList);
+            setSharedWithLocal(newList.sharedWith);
             setCurrentListId(newId);
             setCurrentListTitle(listName);
             handleAddListPopUp();
@@ -163,10 +160,15 @@ function SignedInApp(props) {
         setAddCollabPopUp(!addCollabPopUp);
     }
 
-    function handleAddCollab(key, email) {
+    async function handleAddCollab(key, email) {
+        const data = await getDoc(doc(db, collectionName, currentListId));
+        const values = data.data();
+        const sharedWithList = values.sharedWith;
+
         if (key === 'Enter') {
-            setSharedWithLocal([...sharedWithLocal, email]);
-            updateDoc(doc(db, collectionName, currentListId), {sharedWith: sharedWithLocal});
+            NotificationManager.success("New member: " + email, "Collaborator added", 3000);
+            updateDoc(doc(db, collectionName, currentListId), {sharedWith: [...sharedWithList, email]});
+            setSharedWithLocal([...sharedWithList, email]);
             handleAddCollabPopUp();
         }
     }
@@ -201,7 +203,6 @@ function SignedInApp(props) {
                                  loading={listsLoading}
                                  error={listsError}
                                  currentListId={currentListId}
-                                 onAddNewList={handleAddList}
                                  onAddListPopUp={handleAddListPopUp}
                                  addListPopUp={addListPopUp}
                                  onDeleteListPopUp={handleDeleteListPopUp}
