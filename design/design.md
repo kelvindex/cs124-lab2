@@ -87,3 +87,15 @@ completely avaiable**
 The signedInApp now has a side panel and icons for editing
 ![](side-panel.png)
 ![](new-list.png)
+
+**After Lab 5**
+The app now displays user info and allows members of a list
+to add other members
+![](collab-window.png)
+The app also displays which user is currently logged in
+![](user-info.png)
+Attempted to allow owner to remove collaborators but could not do so in time
+Interface is a little clunky for small screen, but has heart
+Also changed up the color scheme a little to make certain actions less scary and collaborators
+button from which users can manage and view members of the team
+![](new-list-display.png)
