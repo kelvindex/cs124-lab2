@@ -1,7 +1,34 @@
 import Collaborator from "./Collaborator";
 import {FaUsersCog} from "react-icons/fa";
+import {useEffect} from "react";
+import {doc, getDoc, updateDoc} from "firebase/firestore";
+import {NotificationManager} from "react-notifications";
 
 function ManageCollaborators(props) {
+    useEffect(() => {
+        async function fetchSharedWithData() {
+            const result = await getDoc(doc(props.db, props.collectionName, props.currentListId));
+            props.onInitSharedWith(result.data().sharedWith);
+        }
+
+        fetchSharedWithData();
+    })
+
+    function handleAddCollab(key, email) {
+
+        if (key === 'Enter') {
+            if (props.sharedWith.indexOf(email) !== -1) {
+                NotificationManager.error("List already shared with " + email, "Failed to share", 3000);
+            } else {
+                props.onUpdateSharedWithLocal(email);
+                console.log("shared with: ", props.sharedWith);
+                updateDoc(doc(props.db, props.collectionName, props.currentListId), {sharedWith: props.sharedWith});
+                NotificationManager.success("New member: " + email, "Collaborator added", 3000);
+                props.onAddCollabPopUp();
+
+            }
+        }
+    }
     return <div className="backdrop" onClick={props.onClose}>
         <div className="collab-modal">
             <div className={"collab-modal-content"}>
@@ -27,7 +54,7 @@ function ManageCollaborators(props) {
                     <input type="email" className="inputItem" placeholder="add collaborator"
                            onClick={(e) => e.stopPropagation()}
                            onKeyPress={(e) => {
-                               props.onAddCollab(e.key, e.target.value);
+                               handleAddCollab(e.key, e.target.value);
                                if (e.key === 'Enter') {
                                    e.target.value = ""
                                }

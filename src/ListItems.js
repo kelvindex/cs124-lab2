@@ -1,14 +1,4 @@
-import {
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    orderBy,
-    query,
-    serverTimestamp,
-    setDoc,
-    updateDoc
-} from "firebase/firestore";
+import {collection, deleteDoc, doc, orderBy, query, serverTimestamp, setDoc, updateDoc} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import DeleteListPopUp from "./DeleteListPopUp";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
@@ -17,8 +7,6 @@ import EditPopUp from "./EditPopUp";
 import DeleteCompletedAlert from "./DeleteCompletedAlert";
 import ListItemsNested from "./ListItemsNested";
 import {FaPlus, FaUsers} from "react-icons/fa";
-import {NotificationManager} from "react-notifications";
-import {useEffect} from "react";
 import ManageCollaborators from "./ManageCollaborators";
 
 function ListItems(props) {
@@ -26,9 +14,6 @@ function ListItems(props) {
     const sortedQ = query(collection(props.db, props.collectionName, props.currentListId, subCollectionName), orderBy(props.orderType[0], props.orderType[1]));
     const [tasks, loading, error] = useCollectionData(sortedQ);
 
-    useEffect(() => {
-        fetchSharedWithData();
-    })
 
     if (loading) {
         return <div className="load">"loading..."</div>;
@@ -78,25 +63,6 @@ function ListItems(props) {
         updateDoc(doc(props.db, props.collectionName, props.currentListId, subCollectionName, item.id), {completed: !item.completed});
     }
 
-    function handleAddCollab(key, email) {
-
-        if (key === 'Enter') {
-            if (props.sharedWithLocal.indexOf(email) !== -1) {
-                NotificationManager.error("List already shared with " + email, "Failed to share", 3000);
-            } else {
-                NotificationManager.success("New member: " + email, "Collaborator added", 3000);
-                props.onUpdateSharedWithLocal([...props.sharedWithLocal, email]);
-                updateDoc(doc(props.db, props.collectionName, props.currentListId), {sharedWith: props.sharedWithLocal});
-                props.onAddCollabPopUp();
-            }
-        }
-    }
-
-    async function fetchSharedWithData() {
-        const result = await getDoc(doc(props.db, props.collectionName, props.currentListId));
-        props.onUpdateSharedWithLocal(result.data().sharedWith);
-    }
-
     return <>
         <button className={"add-collab-button"} onClick={props.onAddCollabPopUp}><FaUsers style={{verticalAlign: 'text-top'}}/> Collaborators</button>
 
@@ -137,7 +103,14 @@ function ListItems(props) {
                                      onSetPriority={props.onSetPriority}>
             <h4>New item</h4></AddPopUp>}
 
-        {props.addCollabPopUp && <ManageCollaborators onAddCollab={handleAddCollab} sharedWith={props.sharedWithLocal} onClose={props.onAddCollabPopUp}/>}
+        {props.addCollabPopUp && <ManageCollaborators db={props.db}
+                                                      onInitSharedWith={props.onInitSharedWith}
+                                                      onAddCollabPopUp={props.onAddCollabPopUp}
+                                                      onUpdateSharedWithLocal={props.onUpdateSharedWithLocal}
+                                                      collectionName={props.collectionName}
+                                                      currentListId={props.currentListId}
+                                                      sharedWith={props.sharedWithLocal}
+                                                      onClose={props.onAddCollabPopUp}/>}
 
 
         {props.editPopUp && <EditPopUp onClose={props.onEditPopUp}
