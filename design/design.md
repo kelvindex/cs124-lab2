@@ -9,7 +9,7 @@ icons and how these attributes fit into the design
 + \#333 for header background color to create an aesthetically pleasing header bar
 + This scheme was inspired by color palettes \#27 on [this website](https://visme.co/blog/website-color-schemes/)
 
-Currently, the app only supports this "dark mode" but future iterations could have different,
+Currently, the signedInApp only supports this "dark mode" but future iterations could have different,
 potentially more accessible color schemes available
 
 ### Icons
@@ -27,7 +27,7 @@ We briefly considered using different color schemes that were
 brighter and more fun, but we figured it would ultimately be too
 distracting.
 
-Previous version of our app had a walk through element organized in 6 categories by
+Previous version of our signedInApp had a walk through element organized in 6 categories by
 buttons on the page as such:
 
 ![Image of task list page](index.png)
@@ -84,7 +84,7 @@ completely avaiable**
 ![](toggle_hide_complete.png)
 
 **After Lab 4**
-The app now has a side panel and icons for editing
+The signedInApp now has a side panel and icons for editing
 ![](side-panel.png)
 ![](new-list.png)
 
@@ -95,3 +95,19 @@ Video showcasing accessibility options: https://www.youtube.com/watch?v=41dpJpfL
 (The keys used are only tab to move through items, space to select, enter to add items, and arrow keys to move through drop-down menus.)
 
 As another note, while this pull request was made after 11pm, the lab was completed before then. We encountered many more issues with recording and uploading the video than expected, leading to this delayed submission.
+
+
+**After Lab 5**
+The app now displays user info and allows members of a list
+to add other members
+![](collab-window.png)
+The app also displays which user is currently logged in
+![](user-info.png)
+Interface is a little clunky for small screen, but has heart
+Also changed up the color scheme a little to make certain actions less scary and collaborators
+button from which users can manage and view members of the team
+![](new-list-display.png)
+Also implemented alerts using Notifications manager. Pictured here is an example,
+as the app prevents attempts to share with an email address from which it is already shared
+![](alert-failure.png)
+Users also now have the ability to delete collaborators

@@ -1,0 +1,61 @@
+.collaborator {
+    text-align: left;
+    font-size: 10pt;
+    margin-bottom: 5px;
+    margin-left: -20px;
+    width : 82%;
+    display: table;
+    vertical-align: center;
+    white-space: normal;
+}
+
+.collaborator label {
+    word-break: break-all;
+}
+
+
+.add-collab-button {
+    border-radius: 3px;
+    margin-left: 40px;
+    background-color: transparent;
+    border-style: solid;
+    border-width: .75px;
+    border-color: orange;
+}
+
+.collab-modal {
+    background-color: #222629;
+    border-radius: 5pt;
+    border-color: black;
+    border-style: solid;
+    margin: 0 auto;
+    top: 30pt;
+    height: 20em;
+    width: 70vw;
+    padding: 1pt 15pt 80px;
+    position: relative;
+    text-align: center;
+    z-index: 3;
+}
+
+.collaborators-container {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #86C232;
+    border-radius: 5px;
+    margin-top: 5px;
+    height: 12em;
+    overflow:hidden;
+    overflow-y:scroll;
+}
+
+.collab-modal-content {
+    margin-top: 15px;
+}
+.modal-header {
+    display: inline-block;
+}
+
+.remove-collab-button {
+    float: right;
+}

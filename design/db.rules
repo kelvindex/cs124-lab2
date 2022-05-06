@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	function signedIn() {
+      return request.auth.uid != null;
+    }
+
+    function emailVerified() {
+    	return request.auth.token.email_verified == true;
+    }
+
+		function isDocOwner() {
+      return request.auth.uid == resource.data.owner;
+    }
+
+    function updatedDocHasCorrectOwner() {
+      return request.auth.uid == request.resource.data.owner;
+    }
+
+    function isSharedWithMe() {
+      return request.auth.token.email in resource.data.sharedWith;
+    }
+
+    match /TaskLists-Auth/{taskList} {
+        allow read: if signedIn() && isDocOwner();
+      	allow create: if signedIn() && updatedDocHasCorrectOwner();
+      	allow update: if signedIn() &&
+        	updatedDocHasCorrectOwner();
+      	allow delete: if signedIn() && isDocOwner();
+
+				match /tasks/{item} {
+        	  allow read, write: if signedIn();
+        }
+    }
+
+    match /TaskLists-Sharing/{taskList} {
+      allow read: if signedIn() && isSharedWithMe();
+      allow create: if signedIn() && updatedDocHasCorrectOwner();
+      allow update: if signedIn() && updatedDocHasCorrectOwner();
+      allow delete: if signedIn() && isDocOwner();
+
+      match /tasks/{item} {
+        	  allow read, write: if signedIn() && emailVerified();
+        }
+    }
+
+  }
+}

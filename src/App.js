@@ -1,24 +1,23 @@
-import './App.css';
 import {useState} from "react";
-import DeleteCompletedAlert from "./DeleteCompletedAlert";
 import ListItems from "./ListItems";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
-import {FaBars, FaTrashAlt} from "react-icons/fa";
+import {FaBars, FaPlus, FaTrashAlt, FaUser} from "react-icons/fa";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {getFirestore, query, collection, setDoc, doc, updateDoc, deleteDoc, orderBy, serverTimestamp} from "firebase/firestore";
+import {collection, doc, getFirestore, query, setDoc, updateDoc, where} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {FaPlus} from "react-icons/fa";
-import AddPopUp from "./AddPopUp";
-import EditPopUp from "./EditPopUp";
 import TaskLists from "./TaskLists";
-import DeleteListPopUp from "./DeleteListPopUp";
 import AddListPopUp from "./AddListPopUp";
+import {getAuth, sendEmailVerification, signOut} from "firebase/auth";
+import {useAuthState} from "react-firebase-hooks/auth";
+import SignUp from "./SignUp";
+import SignIn from "./SignIn";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+// Your web signedInApp's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAx_Uoa4hi54nVFG2FtmKXlQzZbmQbIGng",
     authDomain: "cs124-lab3-6962e.firebaseapp.com",
@@ -31,10 +30,40 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionName = "TaskLists"
-// const subCollectionName = "tasks";
+const collectionName = "TaskLists-Sharing";
+
+const auth = getAuth();
 
 function App() {
+    const [user, userLoading, userError] = useAuthState(auth);
+    const [signUpPopUp, setSignUpPopUp] = useState(false);
+
+    function verifyEmail() {
+        sendEmailVerification(user);
+    }
+
+    if (userLoading) {
+        return <div className="load">"loading..."</div>;
+    }
+
+    if (userError) {
+        console.log(userError);
+        return "there's been an error logging in"
+    }
+
+    function handleSignUpPopUp() {
+        setSignUpPopUp(!signUpPopUp);
+    }
+
+    return <>
+        {user ? <SignedInApp auth={auth} user={user} verifyEmail={verifyEmail}/> : <SignIn auth={auth} onSignUp={handleSignUpPopUp}/>}
+        {signUpPopUp && <SignUp auth={auth} onSignUp={handleSignUpPopUp} onClose={handleSignUpPopUp}/>}
+
+    </>;
+
+}
+
+function SignedInApp(props) {
     const [completedToggle, setCompletedToggle] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [addPopUp, setAddPopUp] = useState(false);
@@ -42,9 +71,9 @@ function App() {
     const [priorityValue, setPriorityValue] = useState(0);
     const [addListPopUp, setAddListPopUp] = useState(false);
     const [deleteListPopUp, setDeleteListPopUp] = useState(false);
-    
+
     const [listItemData, setListItemData] = useState("");
-    
+
     const priorityOrder = ["priority", "desc"];
     const nameOrder = ["value", "asc"];
     const timeOrder = ["time", "asc"];
@@ -52,21 +81,12 @@ function App() {
 
     const [showLists, setShowLists] = useState(false);
     const [currentListId, setCurrentListId] = useState("");
-    const [subCollectionName, setSubCollectionName] = useState("");
     const [currentListTitle, setCurrentListTitle] = useState("Tasks");
+    const [sharedWithLocal, setSharedWithLocal] = useState([])
 
-    const tasksListsQ = query(collection(db, collectionName));
-    const [tasksLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
-
-    const sortedQ = query(collection(db, collectionName, currentListId, subCollectionName), orderBy(orderType[0], orderType[1]));
-    const [tasks, loading, error] = useCollectionData(sortedQ);
-
-    function handleEditItem(itemId, value, field) {
-        setDoc(doc(db, collectionName, currentListId, subCollectionName, itemId),
-            {[field]: value}, {merge: true});
-        // handleEditPopUp();
-
-    }
+    const [addCollabPopUp, setAddCollabPopUp] = useState(false);
+    const tasksListsQ = query(collection(db, collectionName), where("sharedWith", "array-contains", props.user.email));
+    const [taskLists, listsLoading, listsError] = useCollectionData(tasksListsQ);
 
     function handleEditPopUp() {
         setEditPopUp(!editPopUp)
@@ -76,31 +96,23 @@ function App() {
         setAddListPopUp(!addListPopUp);
     }
 
-    function handleAddItem(key, value) {
-        if (key === 'Enter') {
-            const newId = generateUniqueID();
-            const newItem = {id: newId, value: value, completed: false, priority: priorityValue, time: serverTimestamp()};
-            setDoc(doc(db, collectionName, currentListId, subCollectionName, newId), newItem);
-        }
-    }
-
     function handleAddList(key, listName) {
         if (key === 'Enter') {
             const newId = generateUniqueID();
-            const newList = {title: listName, tasks: [], id: newId};
+            const newList = {
+                title: listName, owner: props.user.uid,
+                sharedWith: [props.user.email], id: newId
+            };
             setDoc(doc(db, collectionName, newId), newList);
+            setSharedWithLocal(newList.sharedWith);
             setCurrentListId(newId);
             setCurrentListTitle(listName);
-            setSubCollectionName("tasks");
             handleAddListPopUp();
-        }
-    }
 
-    function handleDeleteCompleted() {
-        tasks.forEach(i => {
-            if (i.completed) deleteDoc(doc(db, collectionName, currentListId, subCollectionName, i.id))
-        });
-        toggleModal(); // close pop up
+            if (showLists) {
+                handleShowLists();
+            }
+        }
     }
 
     function handleAddPopUp() {
@@ -111,43 +123,20 @@ function App() {
         setCompletedToggle(!completedToggle);
     }
 
-    function handleChangeCompletedItems(item) {
-        updateDoc(doc(db, collectionName, currentListId, subCollectionName, item.id), {completed: !item.completed});
-    }
-
-    function toggleModal() {
+    function handleDeleteCompletedPopUp() {
         setShowDeleteAlert(!showDeleteAlert);
-    }
-
-    function handleSelectAll() {
-        tasks.forEach(i => i.completed === false ? updateDoc(doc(db, collectionName, currentListId, subCollectionName, i.id), {completed: true}) : i);
-    }
-
-    function handleDeselectAll() {
-        tasks.forEach(i => i.completed === true ? updateDoc(doc(db, collectionName, currentListId, subCollectionName, i.id), {completed: false}) : i);
     }
 
     function handleSetPriorityValue(priority) {
         setPriorityValue(priority);
     }
 
-    if (loading) {
-        return <div className="load">"loading..."</div>;
-    }
-
-    if (error) {
-        console.log(error);
-        return "there's been an error"
-    }
-
     function handleOrderBy(ordering) {
         if (ordering === "priority") {
             setOrderType(priorityOrder);
-        }
-        else if (ordering === "name") {
+        } else if (ordering === "name") {
             setOrderType(nameOrder)
-        }
-        else {
+        } else {
             setOrderType(timeOrder)
         }
 
@@ -155,7 +144,6 @@ function App() {
 
     function getListItemData(listItemData) {
         setListItemData(listItemData);
-        console.log("data: ", listItemData);
     }
 
     function handleShowLists() {
@@ -164,7 +152,6 @@ function App() {
 
     function handleSetCurrentListId(listId, listName) {
         setCurrentListId(listId);
-        setSubCollectionName("tasks");
         setCurrentListTitle(listName);
     }
 
@@ -172,11 +159,22 @@ function App() {
         setDeleteListPopUp(!deleteListPopUp);
     }
 
-    function handleDeleteList() {
-        deleteDoc(doc(db, collectionName, currentListId));
-        setCurrentListId("");
-        setSubCollectionName("");
-        handleDeleteListPopUp();
+    function handleAddCollabPopUp() {
+        setAddCollabPopUp(!addCollabPopUp);
+    }
+
+    function handleUpdateSharedWithLocalInit(list) {
+        setSharedWithLocal(list);
+    }
+
+    function handleVerifyEmail() {
+        NotificationManager.warning("Please check your inbox", "Verification email sent", 3000);
+        props.verifyEmail();
+    }
+
+    function handleRemoveCollab(email) {
+        NotificationManager.warning(email + " no longer has access to this list", "Successfully removed ", 3000);
+        updateDoc(doc(db, collectionName, currentListId), {sharedWith: sharedWithLocal.filter(e => e !== email)});
     }
 
     return <>
@@ -184,59 +182,64 @@ function App() {
             <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
             <div id="titleBar">
                 <h1>{currentListId !== "" ? currentListTitle : "Create list"}
-                    {currentListId !== "" ? <button className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt/></button> :
-                        null }</h1>
+                    {currentListId !== "" ?
+                        <button style={{verticalAlign: 'middle'}} className="delete-list-button" onClick={handleDeleteListPopUp}><FaTrashAlt /></button> :
+                        null}</h1>
+
+                <div className={"right-navbar"}>
+                    <p><FaUser style={ {verticalAlign: 'text-bottom'}}/> {props.user.displayName || props.user.email}</p>
+                    {!props.user.emailVerified && <button type="button" className={'verify-email-button'} onClick={handleVerifyEmail}>Verify email</button>}
+                    <button className={"sign-out"} onClick={() => signOut(auth)}>Sign Out</button>
+                </div>
+
             </div>
         </div>
 
-        {showLists && <TaskLists lists={tasksLists}
+        {showLists && <TaskLists lists={taskLists}
                                  onCloseSideBar={handleShowLists}
                                  loading={listsLoading}
                                  error={listsError}
                                  currentListId={currentListId}
-                                 onAddNewList={handleAddList}
                                  onAddListPopUp={handleAddListPopUp}
                                  addListPopUp={addListPopUp}
                                  onDeleteListPopUp={handleDeleteListPopUp}
                                  onChangeCurrentList={handleSetCurrentListId}/>
         }
-        {currentListId === "" && <button className="add-list-button" onClick={handleAddListPopUp}><FaPlus/> New list</button>}
-        {addListPopUp && <AddListPopUp onAddNewList={handleAddList} onClose={handleAddListPopUp}> <h4>New List</h4></AddListPopUp>}
-        {deleteListPopUp && <DeleteListPopUp onDelete={handleDeleteList} onClose={handleDeleteListPopUp}>Delete this list?</DeleteListPopUp>}
+        {currentListId === "" &&
+            <button className="add-list-button" onClick={handleAddListPopUp}><FaPlus/> New list</button>}
+        {addListPopUp &&
+            <AddListPopUp onAddNewList={handleAddList} onClose={handleAddListPopUp}><h4>New List</h4></AddListPopUp>}
 
-        {currentListId !== "" && <ListItems data={completedToggle ? tasks.filter(i => !i.completed) : tasks}
-                   onSelectAll={handleSelectAll}
-                   onDeselectAll={handleDeselectAll}
-                   onCompletedToggle={handleToggleCompleted}
-                   onChangeCompletedItems={handleChangeCompletedItems}
-                   onToggleEditItem={handleEditPopUp}
-                   onAddItem={handleAddItem}
-                   onOrderBy={handleOrderBy}
-                   onGetListItemData={getListItemData}
-                   priority={priorityValue}
+        {currentListId !== "" && <ListItems onCompletedToggle={handleToggleCompleted}
+                                            onToggleEditItem={handleEditPopUp}
+                                            onOrderBy={handleOrderBy}
+                                            onGetListItemData={getListItemData}
+                                            onSetPriority={handleSetPriorityValue}
+                                            onSetCurrentListId={handleSetCurrentListId}
+                                            onDeleteListPopUp={handleDeleteListPopUp}
+                                            onDeleteCompletedPopUp={handleDeleteCompletedPopUp}
+                                            onAddPopUp={handleAddPopUp}
+                                            onEditPopUp={handleEditPopUp}
+                                            onAddCollabPopUp={handleAddCollabPopUp}
+                                            onInitSharedWith={handleUpdateSharedWithLocalInit}
+                                            onRemoveCollab={handleRemoveCollab}
+                                            ownerEmail={props.user.email}
+                                            sharedWithLocal={sharedWithLocal}
+                                            currentListId={currentListId}
+                                            priority={priorityValue}
+                                            completedToggle={completedToggle}
+                                            db={db}
+                                            collectionName={collectionName}
+                                            listItemData={listItemData}
+                                            orderType={orderType}
+                                            editPopUp={editPopUp}
+                                            addPopUp={addPopUp}
+                                            deleteListPopUp={deleteListPopUp}
+                                            showDeleteAlert={showDeleteAlert}
+                                            addCollabPopUp={addCollabPopUp}
         />}
 
-        {currentListId !== "" && <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>}
-        {addPopUp && <AddPopUp onAddItem={handleAddItem}
-                               onClose={handleAddPopUp}
-                               priority={priorityValue}
-                               onSetPriority={handleSetPriorityValue}>
-            <h4>New item</h4></AddPopUp>}
-        <br/><br/>
-        {tasks.filter(i => i.completed).length !== 0 && !completedToggle &&
-            <button id="delete" onClick={toggleModal}>Delete completed items</button>}
-
-        {editPopUp && <EditPopUp onClose={handleEditPopUp}
-                                 onEditPriority={handleEditItem}
-                                 onFinishEdit={handleEditItem}
-                                 listItemData={listItemData}>
-            <h4>Edit item</h4></EditPopUp>}
-
-        {showDeleteAlert && <DeleteCompletedAlert onClose={toggleModal} onDelete={handleDeleteCompleted}>
-            <div>
-                Are you sure you want to delete all completed items?
-            </div>
-        </DeleteCompletedAlert>}
+        <NotificationContainer/>
     </>;
 }
 

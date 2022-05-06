@@ -2,7 +2,7 @@ body {
   background-color: #222629;
   color: white;
   margin: 0;
-  font-size: 14pt;
+  font-size: 11pt;
   font-family: "Roboto", sans-serif;
 }
 
@@ -28,7 +28,7 @@ h1 {
 ul {
   list-style: none;
   font-family: "Roboto", sans-serif;
-  font-size: 14pt;
+  font-size: 12pt;
 }
 
 ul li {
@@ -44,32 +44,27 @@ ul li {
 #addItem {
   margin-left: 0;
   text-align: left;
-  font-size: 14px;
   color: #6B6E70;
 }
 
 button {
-  margin-left: 2.2em;
-  background-color: darkred;
+  margin-left: 2.7em;
+  background-color: #e67e00;
   box-shadow: black;
   font-family: "Roboto", sans-serif;
-  font-size: 14pt;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
-  padding: 6px;
+  padding: 3px 15px;
+  vertical-align: center;
 }
 
 #uncomplete {
-  margin: 3em 1em 3em 2.2em;
-  font-size: 14pt;
-}
-.fa-info-circle {
-  color: #86C232;
+  margin-left: 3.1em;
 }
 
-input[type=text] {
+.inputItem {
   font-family: "Roboto", sans-serif;
   color: white;
   background-color: transparent;
@@ -84,15 +79,6 @@ input[class=listItemValue] {
   border-bottom: none;
 }
 
-input[class=greenCheck] {
-  display: inline-block;
-  position: relative;
-  background-color: #86C232;
-}
-
-.greenCheck {
-  background: #86C232;
-}
 
 input[class=toggle] {
   -webkit-appearance: none;
@@ -153,28 +139,16 @@ input[type=checkbox]:focus {
   right: 300pt;
   width: 100vw;
   height: 100vh;
-  z-index: 4;
+  z-index: 3;
   background-color: rgba(0, 0, 0, .8);
 }
 
-.alert-buttons {
-  margin: 0 auto;
-  position: absolute;
-  display: flex;
-  bottom: 15pt;
-  left: 0;
-}
-
-
-.alert-cancel {
-  background-color: #86C232;
-}
 
 .item-value {
   width : 70%;
   overflow-wrap: normal;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: center;
   white-space: normal;
 }
 
@@ -190,7 +164,29 @@ input[type=checkbox]:focus {
   padding: 1pt 15pt 80px;
   position: relative;
   text-align: center;
+}
 
+.modal-content {
+  justify-content: center;
+  margin-top: 2.5em;
+}
+
+.alert-buttons {
+  position: relative;
+  align-items: center;
+  display: flex;
+  bottom: 15pt;
+  left: 0;
+  margin-top: 5em;
+  margin-left: -22px;
+}
+
+
+.alert-ok {
+  background-color: darkred;
+}
+.alert-cancel {
+  background-color: #86C232;
 }
 
 h4 {
@@ -205,6 +201,7 @@ h4 {
   display: block;
   justify-content: center;
   margin-left: 33px;
+  font-size: 10pt;
 }
 
 .order-priority {
@@ -212,13 +209,12 @@ h4 {
   border-color: #86C232;
   border-style: solid;
   border-radius: 20px;
-  border-width: 1pt;
+  border-width: .75pt;
   color: #86C232;
   margin-top: 8px;
   margin-bottom: 5px;
   margin-left: 7px;
-  font-size: 12pt;
-  padding: 4px;
+  padding: 3px 12px;
 }
 
 .order-priority:hover {
@@ -235,18 +231,19 @@ h4 {
   border: none;
   padding: 0;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .navbar {
   opacity: .97;
-  background-color: #86C232;
+  background-color: #51761E;
   position: absolute;
   top: 0;
   left: 0;
   width: 225px;
   height: 100%;
   padding: 20px 0;
-  z-index: 3;
+  z-index: 2;
   transition: all 0.5s ease;
 }
 
@@ -256,13 +253,15 @@ h4 {
 
 .navbar .lists-menu {
   padding-top: 10px;
-  height: 100vh;
+  height: 81%;
   max-width: 300px;
   display: flex;
   flex-direction: column;
   margin-left: -40px;
   padding-left: 50px;
   transition: transform 0.5s ease-in-out;
+  overflow:hidden;
+  overflow-y:scroll;
 }
 
 /*.navbar .lists-menu:focus {*/
@@ -311,16 +310,18 @@ input[type="radio"] {
 
 
 .close-sidebar-button {
-  margin-left: 20px;
+  margin-left: 10px;
   font-size: 20px;
   border: none;
   background-color: transparent;
 }
 
 .add-list-button {
-  margin-left: 20px;
-  border: none;
+  margin-left: 25px;
   background-color: transparent;
+  color: #e67e00;
+  padding: 1px;
+  font-weight: 700;
 }
 
 .toggle-side-menu {
@@ -340,4 +341,44 @@ input[type="radio"] {
   opacity: 0;
   display: flex;
   size: 0px;
+}
+
+.delete-list-button {
+  border: 0;
+  outline: 0;
+  border-radius: 2px;
+  padding: 3px 5px;
+  vertical-align: auto;
+  margin-left: 15px;
+}
+
+.right-navbar {
+  float: right;
+  display: flex;
+  flex-direction: column;
+  margin-right: 22px;
+  margin-top: -90px;
+}
+
+.right-navbar p {
+  font-size: 10pt;
+}
+
+.sign-out {
+  font-size: 10pt;
+  padding: .25em;
+}
+
+p {
+  margin-bottom: 5px;
+}
+
+.fa-user-plus {
+  vertical-align: text-bottom;
+}
+
+.verify-email-button {
+  background-color: #86C232;
+  margin-bottom: 5px;
+  margin-top: 3px;
 }

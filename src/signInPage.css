@@ -1,0 +1,94 @@
+.sign-in {
+    background-color: #86C232;
+    border-radius: 20px;
+    padding: 3px 15px;
+    font-size: 11pt;
+}
+
+.sign-in-title {
+    padding-top: 20px;
+    padding-bottom: 0px;
+    margin-left: 18px;
+    font-family: "Arial", sans-serif;
+    margin-top: 0;
+    font-size: 24pt;
+    overflow: hidden;
+}
+
+#sign-in-button {
+    margin-left: 0;
+}
+
+.sign-in-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.error-message {
+    font-size: 10pt;
+}
+
+label {
+    font-size: 10pt;
+}
+
+.creds {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    outline: none;
+    box-sizing: border-box;
+    border: 2px solid rgba(0, 0, 0, 0.02);
+}
+
+.sign-up {
+    background-color: transparent;
+    border: .5px solid;
+    margin-top: 1em;
+    margin-bottom: .5em;
+}
+
+.sign-up-modal{
+    height: 17em;
+}
+
+.sign-up-buttons {
+    display: flex;
+    margin-left: -2em;
+    font-weight: 700;
+}
+
+.sign-up-button {
+    font-size: 10pt;
+}
+
+.enter-creds {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2em;
+    align-items: center;
+}
+
+.pw {
+    margin-bottom: 1em;
+}
+
+.enter-creds input[type=text] {
+    outline: 0;
+}
+
+.input-creds {
+    margin-top: .75em;
+}
+
+.sign-in-option-button {
+    margin-top: .5em;
+    margin-left: 0;
+}
+
+.fa-google {
+    vertical-align: middle;
+}
