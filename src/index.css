@@ -139,7 +139,7 @@ input[type=checkbox]:focus {
   right: 300pt;
   width: 100vw;
   height: 100vh;
-  z-index: 2;
+  z-index: 3;
   background-color: rgba(0, 0, 0, .8);
 }
 
@@ -243,7 +243,7 @@ h4 {
   width: 225px;
   height: 100%;
   padding: 20px 0;
-  z-index: 3;
+  z-index: 2;
   transition: all 0.5s ease;
 }
 

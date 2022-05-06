@@ -109,6 +109,10 @@ function SignedInApp(props) {
             setCurrentListId(newId);
             setCurrentListTitle(listName);
             handleAddListPopUp();
+
+            if (showLists) {
+                handleShowLists();
+            }
         }
     }
 
@@ -165,11 +169,17 @@ function SignedInApp(props) {
         const values = data.data();
         const sharedWithList = values.sharedWith;
 
-        if (key === 'Enter' && !(email in sharedWithList)) {
-            NotificationManager.success("New member: " + email, "Collaborator added", 3000);
-            updateDoc(doc(db, collectionName, currentListId), {sharedWith: [...sharedWithList, email]});
-            setSharedWithLocal([...sharedWithList, email]);
-            handleAddCollabPopUp();
+        if (key === 'Enter') {
+            console.log("Email: ", email.toString());
+            console.log("Shared with:", sharedWithList);
+            if (sharedWithList.indexOf(email) !== -1) {
+                NotificationManager.error("List already shared with " + email, "Failed to share", 3000);
+            } else {
+                NotificationManager.success("New member: " + email, "Collaborator added", 3000);
+                updateDoc(doc(db, collectionName, currentListId), {sharedWith: [...sharedWithList, email]});
+                setSharedWithLocal([...sharedWithList, email]);
+                handleAddCollabPopUp();
+            }
         }
     }
 
