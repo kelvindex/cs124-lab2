@@ -41,6 +41,7 @@ function ManageCollaborators(props) {
                             <Collaborator
                                 key={p}
                                 email={p}
+                                onRemoveCollab={props.onRemoveCollab}
                                 ownerEmail={props.ownerEmail}
                             />
                         )}

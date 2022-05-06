@@ -109,6 +109,7 @@ function ListItems(props) {
                                                       collectionName={props.collectionName}
                                                       currentListId={props.currentListId}
                                                       sharedWith={props.sharedWithLocal}
+                                                      ownerEmail={props.ownerEmail}
                                                       onClose={props.onAddCollabPopUp}
                                                       onRemoveCollab={props.onRemoveCollab}/>}
 

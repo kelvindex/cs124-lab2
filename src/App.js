@@ -173,7 +173,8 @@ function SignedInApp(props) {
     }
 
     function handleRemoveCollab(email) {
-        updateDoc(doc(db, collectionName, currentListId), {sharedWith: [sharedWithLocal.filter(e => e !== email)]})
+        NotificationManager.warning(email + " no longer has access to this list", "Successfully removed ", 3000);
+        updateDoc(doc(db, collectionName, currentListId), {sharedWith: sharedWithLocal.filter(e => e !== email)});
     }
 
     return <>
@@ -222,6 +223,7 @@ function SignedInApp(props) {
                                             onAddCollabPopUp={handleAddCollabPopUp}
                                             onInitSharedWith={handleUpdateSharedWithLocalInit}
                                             onRemoveCollab={handleRemoveCollab}
+                                            ownerEmail={props.user.email}
                                             sharedWithLocal={sharedWithLocal}
                                             currentListId={currentListId}
                                             priority={priorityValue}
