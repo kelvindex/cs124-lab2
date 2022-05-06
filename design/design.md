@@ -103,7 +103,6 @@ to add other members
 ![](collab-window.png)
 The app also displays which user is currently logged in
 ![](user-info.png)
-Attempted to allow owner to remove collaborators but could not do so in time
 Interface is a little clunky for small screen, but has heart
 Also changed up the color scheme a little to make certain actions less scary and collaborators
 button from which users can manage and view members of the team
@@ -111,3 +110,4 @@ button from which users can manage and view members of the team
 Also implemented alerts using Notifications manager. Pictured here is an example,
 as the app prevents attempts to share with an email address from which it is already shared
 ![](alert-failure.png)
+Users also now have the ability to delete collaborators
