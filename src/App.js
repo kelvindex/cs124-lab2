@@ -170,8 +170,6 @@ function SignedInApp(props) {
         const sharedWithList = values.sharedWith;
 
         if (key === 'Enter') {
-            console.log("Email: ", email.toString());
-            console.log("Shared with:", sharedWithList);
             if (sharedWithList.indexOf(email) !== -1) {
                 NotificationManager.error("List already shared with " + email, "Failed to share", 3000);
             } else {

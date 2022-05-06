@@ -3,7 +3,14 @@
     font-size: 10pt;
     margin-bottom: 5px;
     margin-left: -20px;
+    width : 80%;
+    display: inline-block;
+    vertical-align: center;
+    white-space: normal;
 }
+
+.collaborator label {
+    word-break: break-all;}
 
 
 .add-collab-button {
