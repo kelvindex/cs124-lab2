@@ -99,3 +99,6 @@ Interface is a little clunky for small screen, but has heart
 Also changed up the color scheme a little to make certain actions less scary and collaborators
 button from which users can manage and view members of the team
 ![](new-list-display.png)
+Also implemented alerts using Notifications manager. Pictured here is an example,
+as the app prevents attempts to share with an email address from which it is already shared
+![](alert-failure.png)
