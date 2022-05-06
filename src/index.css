@@ -79,15 +79,6 @@ input[class=listItemValue] {
   border-bottom: none;
 }
 
-input[class=greenCheck] {
-  display: inline-block;
-  position: relative;
-  background-color: #86C232;
-}
-
-.greenCheck {
-  background: #86C232;
-}
 
 input[class=toggle] {
   -webkit-appearance: none;
@@ -240,6 +231,7 @@ h4 {
   border: none;
   padding: 0;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .navbar {

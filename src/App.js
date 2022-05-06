@@ -165,7 +165,7 @@ function SignedInApp(props) {
         const values = data.data();
         const sharedWithList = values.sharedWith;
 
-        if (key === 'Enter') {
+        if (key === 'Enter' && !(email in sharedWithList)) {
             NotificationManager.success("New member: " + email, "Collaborator added", 3000);
             updateDoc(doc(db, collectionName, currentListId), {sharedWith: [...sharedWithList, email]});
             setSharedWithLocal([...sharedWithList, email]);
@@ -213,7 +213,6 @@ function SignedInApp(props) {
         {addListPopUp &&
             <AddListPopUp onAddNewList={handleAddList} onClose={handleAddListPopUp}><h4>New List</h4></AddListPopUp>}
 
-
         {currentListId !== "" && <ListItems onCompletedToggle={handleToggleCompleted}
                                             onToggleEditItem={handleEditPopUp}
                                             onOrderBy={handleOrderBy}
@@ -237,7 +236,7 @@ function SignedInApp(props) {
                                             showDeleteAlert={showDeleteAlert}
         />}
 
-        {addCollabPopUp && <ManageCollaborators onAddCollab={handleAddCollab} sharedWith={sharedWithLocal} onClose={handleAddCollabPopUp}/>}
+        {addCollabPopUp && <ManageCollaborators ownerEmail={props.user.email} onAddCollab={handleAddCollab} sharedWith={sharedWithLocal} onClose={handleAddCollabPopUp}/>}
         {currentListId !== "" && <button className="add-button" onClick={handleAddPopUp}><FaPlus/> Add item</button>}
 
         <br/><br/>

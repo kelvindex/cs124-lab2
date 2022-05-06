@@ -16,6 +16,7 @@ function ManageCollaborators(props) {
                             <Collaborator
                                 key={p}
                                 email={p}
+                                ownerEmail={props.ownerEmail}
                             />
                         )}
                     </ul>

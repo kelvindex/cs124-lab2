@@ -1,8 +1,8 @@
 .collaborator {
-    display: flex;
-    flex-direction: row;
+    text-align: left;
     font-size: 10pt;
-    margin-bottom: 7px;
+    margin-bottom: 5px;
+    margin-left: -20px;
 }
 
 
@@ -46,4 +46,8 @@
 }
 .modal-header {
     display: inline-block;
+}
+
+.remove-collab-button {
+    float: right;
 }
