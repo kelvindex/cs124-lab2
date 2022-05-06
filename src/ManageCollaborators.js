@@ -20,9 +20,7 @@ function ManageCollaborators(props) {
             if (props.sharedWith.indexOf(email) !== -1) {
                 NotificationManager.error("List already shared with " + email, "Failed to share", 3000);
             } else {
-                props.onUpdateSharedWithLocal(email);
-                console.log("shared with: ", props.sharedWith);
-                updateDoc(doc(props.db, props.collectionName, props.currentListId), {sharedWith: props.sharedWith});
+                updateDoc(doc(props.db, props.collectionName, props.currentListId), {sharedWith: [...props.sharedWith, email]});
                 NotificationManager.success("New member: " + email, "Collaborator added", 3000);
                 props.onAddCollabPopUp();
 
