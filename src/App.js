@@ -163,10 +163,6 @@ function SignedInApp(props) {
         setAddCollabPopUp(!addCollabPopUp);
     }
 
-    function handleUpdateSharedWithLocal(email) {
-        setSharedWithLocal([...sharedWithLocal, email]);
-    }
-
     function handleUpdateSharedWithLocalInit(list) {
         setSharedWithLocal(list);
     }
@@ -220,7 +216,6 @@ function SignedInApp(props) {
                                             onAddPopUp={handleAddPopUp}
                                             onEditPopUp={handleEditPopUp}
                                             onAddCollabPopUp={handleAddCollabPopUp}
-                                            onUpdateSharedWithLocal={handleUpdateSharedWithLocal}
                                             onInitSharedWith={handleUpdateSharedWithLocalInit}
                                             sharedWithLocal={sharedWithLocal}
                                             currentListId={currentListId}

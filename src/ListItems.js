@@ -106,7 +106,6 @@ function ListItems(props) {
         {props.addCollabPopUp && <ManageCollaborators db={props.db}
                                                       onInitSharedWith={props.onInitSharedWith}
                                                       onAddCollabPopUp={props.onAddCollabPopUp}
-                                                      onUpdateSharedWithLocal={props.onUpdateSharedWithLocal}
                                                       collectionName={props.collectionName}
                                                       currentListId={props.currentListId}
                                                       sharedWith={props.sharedWithLocal}
