@@ -6,7 +6,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
-import {collection, doc, getFirestore, query, setDoc, where} from "firebase/firestore";
+import {collection, doc, getFirestore, query, setDoc, updateDoc, where} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import TaskLists from "./TaskLists";
 import AddListPopUp from "./AddListPopUp";
@@ -172,6 +172,10 @@ function SignedInApp(props) {
         props.verifyEmail();
     }
 
+    function handleRemoveCollab(email) {
+        updateDoc(doc(db, collectionName, currentListId), {sharedWith: [sharedWithLocal.filter(e => e !== email)]})
+    }
+
     return <>
         <div className="top-nav">
             <button className="toggle-side-menu" onClick={handleShowLists} aria-label={"Tasks List"}><FaBars/></button>
@@ -217,6 +221,7 @@ function SignedInApp(props) {
                                             onEditPopUp={handleEditPopUp}
                                             onAddCollabPopUp={handleAddCollabPopUp}
                                             onInitSharedWith={handleUpdateSharedWithLocalInit}
+                                            onRemoveCollab={handleRemoveCollab}
                                             sharedWithLocal={sharedWithLocal}
                                             currentListId={currentListId}
                                             priority={priorityValue}

@@ -109,7 +109,8 @@ function ListItems(props) {
                                                       collectionName={props.collectionName}
                                                       currentListId={props.currentListId}
                                                       sharedWith={props.sharedWithLocal}
-                                                      onClose={props.onAddCollabPopUp}/>}
+                                                      onClose={props.onAddCollabPopUp}
+                                                      onRemoveCollab={props.onRemoveCollab}/>}
 
 
         {props.editPopUp && <EditPopUp onClose={props.onEditPopUp}
